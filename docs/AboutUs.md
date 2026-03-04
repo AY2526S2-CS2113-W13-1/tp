@@ -1,6 +1,9 @@
 # About us
-
-Display | Name  |             Github Profile              | Portfolio 
---------|:-----:|:---------------------------------------:|:---------:
+Display |    Name    | Github Profile | Portfolio 
+--------|:----------:|:--------------:|:---------:
+![](https://via.placeholder.com/100.png?text=Photo) | Veer Mehta | [Github](https://github.com/) | [Portfolio](docs/team/johndoe.md)
+![](https://via.placeholder.com/100.png?text=Photo) | Rehaan Mahmood | [Github](https://github.com/RehaanMahmood) | [Portfolio](docs/team/johndoe.md)
+![](https://via.placeholder.com/100.png?text=Photo) | Smeet Ronak | [Github](https://github.com/SmeetRonak) | [Portfolio](docs/team/johndoe.md)
+![](https://via.placeholder.com/100.png?text=Photo) | Yi Yang | [Github](https://github.com/) | [Portfolio](docs/team/johndoe.md)
 ![](https://via.placeholder.com/100.png?text=Photo) | Aarav | [Github](https://github.com/AaravBaori) | [Portfolio](docs/team/johndoe.md)
 
