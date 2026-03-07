@@ -1,6 +1,8 @@
 package ccamanager.parser;
 
-import ccamanager.command.*;
+import ccamanager.command.ExitCommand;
+import ccamanager.command.Command;
+import ccamanager.command.UnknownCommand;
 
 /**
  * Parser — reads raw user input and returns the appropriate Command object.
@@ -38,9 +40,8 @@ public class Parser {
         String commandWord = parts[0].toLowerCase();
         String arguments = parts.length > 1 ? parts[1].trim() : "";
 
-        switch (commandWord) {
-            case "bye":
-                return new ExitCommand();
+        if (commandWord.equals("bye")) {
+            return new ExitCommand();
 
             // -------------------------------------------------------
             // CCA commands — Veer adds cases here
@@ -51,10 +52,8 @@ public class Parser {
             // Resident commands — Aarav / Yi Yang add cases here
             // e.g. case "add-resident": return new AddResidentCommand(...)
             // -------------------------------------------------------
-
-            default:
-                return new UnknownCommand();
         }
+        return new UnknownCommand();
     }
 
     // ----------------------------------------------------------------
