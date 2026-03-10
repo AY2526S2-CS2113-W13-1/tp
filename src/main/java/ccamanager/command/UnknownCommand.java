@@ -14,4 +14,9 @@ public class UnknownCommand extends Command {
     public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui ui) {
         ui.showError("Unknown command. Type 'help' for a list of commands.");
     }
+
+    @Override
+    public boolean isExit() {
+        return false;
+    }
 }

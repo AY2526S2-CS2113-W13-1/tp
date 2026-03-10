@@ -1,5 +1,7 @@
 package ccamanager.model;
 
+import java.util.ArrayList;
+
 /**
  * Represents a Co-Curricular Activity (CCA).
  * Plain data model — fields only, no business logic.
@@ -11,6 +13,7 @@ public class Cca {
      * The display name of this CCA.
      */
     private String name;
+    private ArrayList<Resident> registeredResidents = new ArrayList<Resident>();
 
     /**
      * @param name the name of the CCA, e.g. "Basketball"
@@ -31,6 +34,10 @@ public class Cca {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addResidentToCca(Resident resident) {
+        registeredResidents.add(resident);
     }
 
     /**
