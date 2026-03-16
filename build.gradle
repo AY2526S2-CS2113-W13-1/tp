@@ -29,7 +29,7 @@ test {
 }
 
 application {
-    mainClass.set("ccamanager.Main")
+    mainClass.set("seedu.duke.Duke")
 }
 
 shadowJar {
