@@ -3,35 +3,44 @@ package ccamanager.command;
 import ccamanager.manager.CcaManager;
 import ccamanager.manager.ResidentManager;
 import ccamanager.ui.Ui;
-import ccamanager.model.Cca;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AddCcaCommandTest {
 
+    private CcaManager ccaManager;
+    private ResidentManager residentManager;
+    private Ui ui;
+
+    @BeforeEach
+    void setUp() {
+        ccaManager = new CcaManager();
+        residentManager = new ResidentManager();
+        ui = new Ui();
+    }
+
     @Test
-    public void execute_addCca_success() {
+    void execute_addCca_success() {
+        new AddCcaCommand("Basketball").execute(ccaManager, residentManager, ui);
+        assertEquals(1, ccaManager.getCCAList().size());
+        assertEquals("Basketball", ccaManager.getCCAList().get(0).getName());
+    }
 
-        CcaManager ccaManager = new CcaManager();
-        ResidentManager residentManager = new ResidentManager();
-        Ui ui = new Ui();
+    @Test
+    void execute_addDuplicateCca_showsError() {
+        new AddCcaCommand("Basketball").execute(ccaManager, residentManager, ui);
+        new AddCcaCommand("Basketball").execute(ccaManager, residentManager, ui);
+        assertEquals(1, ccaManager.getCCAList().size());
+        assertEquals("CCA Basketball already exists.", ui.getLastMessage());
+    }
 
-        AddCcaCommand command = new AddCcaCommand("Basketball");
-
-        command.execute(ccaManager, residentManager, ui);
-
-        boolean found = false;
-
-        for (Cca cca : ccaManager.getCCAList()) {
-            if (cca.getName().equals("Basketball")) {
-                found = true;
-                break;
-            }
-        }
-
-        assertTrue(found);
+    @Test
+    void execute_addDuplicateCcaDifferentCase_showsError() {
+        new AddCcaCommand("Basketball").execute(ccaManager, residentManager, ui);
+        new AddCcaCommand("basketball").execute(ccaManager, residentManager, ui);
+        assertEquals(1, ccaManager.getCCAList().size());
+        assertEquals("CCA basketball already exists.", ui.getLastMessage());
     }
 }
-
