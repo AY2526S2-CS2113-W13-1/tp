@@ -2,6 +2,8 @@ package ccamanager.model;
 
 import java.util.ArrayList;
 
+import ccamanager.exceptions.ResidentAlreadyInCcaException;
+
 /**
  * Represents a Co-Curricular Activity (CCA).
  * Plain data model — fields only, no business logic.
@@ -40,7 +42,13 @@ public class Cca {
      * Add resident to a CCA
      * @param resident the resident to be added
      */
-    public void addResidentToCca(Resident resident) {
+    public void addResidentToCca(Resident resident) throws ResidentAlreadyInCcaException {
+        boolean alreadyIn = registeredResidents.stream()
+                .anyMatch(x -> x.getMatricNumber().equals(resident.getMatricNumber()));
+        if (alreadyIn) {
+            throw new ResidentAlreadyInCcaException("Resident " + resident.getName()
+                    + " is already a member of " + this.name + ".");
+        }
         registeredResidents.add(resident);
     }
 

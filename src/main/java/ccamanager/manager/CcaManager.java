@@ -3,7 +3,10 @@ package ccamanager.manager;
 import ccamanager.exceptions.CcaNotFoundException;
 import ccamanager.model.Cca;
 
+import ccamanager.exceptions.DuplicateCcaException;
+
 import java.util.ArrayList;
+
 
 public class CcaManager {
     private ArrayList<Cca> ccaList =  new ArrayList<>();
@@ -12,9 +15,13 @@ public class CcaManager {
      * Creates and adds the CCA to CCAList
      * @param ccaName Name of the CCA
      */
-    public void addCCA(String ccaName) {
-        Cca cca = new Cca(ccaName);
-        ccaList.add(cca);
+    public void addCCA(String ccaName) throws DuplicateCcaException {
+        boolean isDuplicate = ccaList.stream()
+                .anyMatch(x -> x.getName().equalsIgnoreCase(ccaName));
+        if (isDuplicate) {
+            throw new DuplicateCcaException("CCA " + ccaName + " already exists.");
+        }
+        ccaList.add(new Cca(ccaName));
     }
 
     /**

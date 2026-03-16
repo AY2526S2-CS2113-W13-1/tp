@@ -27,17 +27,23 @@ public class Parser {
             return new UnknownCommand();
         }
 
-        String[] parts = input.split(" ");
+        String[] parts = input.trim().split("\\s+");
         String commandWord = parts[0].toLowerCase();
 
         switch (commandWord) {
         case "add-cca":
+            if (parts.length < 2 || parts[1].isBlank()) {
+                return new UnknownCommand("Usage: add-cca <cca name>");
+            }
             return new AddCcaCommand(getCcaName(input));
 
         case "view-cca":
             return new ViewCcaCommand();
 
         case "delete-cca":
+            if (parts.length < 2 || parts[1].isBlank()) {
+                return new UnknownCommand("Usage: delete-cca <cca name>");
+            }
             return new DeleteCcaCommand(getCcaName(input));
 
         case "bye":
@@ -45,10 +51,34 @@ public class Parser {
 
         case "view-resident":
             return new ViewResidentCommand();
+
         case "add-resident":
-            return new AddResidentCommand(parts[1],parts[2]);
+            if (parts.length < 3) {
+                return new UnknownCommand("Usage: add-resident <name> <matric number>");
+            }
+            if (parts[1].isBlank()) {
+                return new UnknownCommand("Resident name cannot be empty.");
+            }
+            if (parts[2].isBlank()) {
+                return new UnknownCommand("Matric number cannot be empty.");
+            }
+            return new AddResidentCommand(parts[1], parts[2]);
+
         case "add-resident-to-cca":
-            return new AddResidentToCcaCommand(parts[1],parts[2],parts[3]);
+            if (parts.length < 4) {
+                return new UnknownCommand("Usage: add-resident-to-cca <matric number> <cca name> <points>");
+            }
+            if (parts[1].isBlank()) {
+                return new UnknownCommand("Matric number cannot be empty.");
+            }
+            if (parts[2].isBlank()) {
+                return new UnknownCommand("CCA name cannot be empty.");
+            }
+            if (parts[3].isBlank()) {
+                return new UnknownCommand("Points cannot be empty.");
+            }
+            return new AddResidentToCcaCommand(parts[1], parts[2], parts[3]);
+
         default:
             return new UnknownCommand();
         }

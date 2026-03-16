@@ -9,14 +9,18 @@ import ccamanager.ui.Ui;
  * Displays an error message. Teammates do not need to touch this file.
  */
 public class UnknownCommand extends Command {
+    private final String message;
 
-    @Override
-    public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui ui) {
-        ui.showError("Unknown command. Type 'help' for a list of commands.");
+    public UnknownCommand() {
+        this.message = "Unknown command. Type 'help' for a list of commands.";
+    }
+
+    public UnknownCommand(String message) {
+        this.message = message;
     }
 
     @Override
-    public boolean isExit() {
-        return false;
+    public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui ui) {
+        ui.showError(message);
     }
 }

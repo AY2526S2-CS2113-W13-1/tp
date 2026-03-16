@@ -2,6 +2,8 @@ package ccamanager.manager;
 
 import ccamanager.model.Resident;
 
+import ccamanager.exceptions.DuplicateResidentException;
+
 import java.util.ArrayList;
 
 /**
@@ -19,9 +21,13 @@ public class ResidentManager {
      * @param residentName name of the resident
      * @param matricNumber unique matric number for the resident
      */
-    public static void addResident(String residentName, String matricNumber) {
-        Resident resident  = new Resident(residentName,matricNumber);
-        residents.add(resident);
+    public void addResident(String residentName, String matricNumber) throws DuplicateResidentException {
+        boolean isDuplicate = residents.stream()
+                .anyMatch(x -> x.getMatricNumber().equalsIgnoreCase(matricNumber));
+        if (isDuplicate) {
+            throw new DuplicateResidentException("Resident with matric number " + matricNumber + " already exists.");
+        }
+        residents.add(new Resident(residentName, matricNumber));
     }
 
 
