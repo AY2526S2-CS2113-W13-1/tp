@@ -27,8 +27,14 @@ public class Parser {
             return new UnknownCommand();
         }
 
+
+
         String[] parts = input.trim().split("\\s+");
         String commandWord = parts[0].toLowerCase();
+
+        assert parts.length > 0 : "Non-blank input should produce at least one token";
+
+
 
         switch (commandWord) {
         case "add-cca":
@@ -44,6 +50,7 @@ public class Parser {
             if (parts.length < 2 || parts[1].isBlank()) {
                 return new UnknownCommand("Usage: delete-cca <cca name>");
             }
+
             return new DeleteCcaCommand(getCcaName(input));
 
         case "bye":

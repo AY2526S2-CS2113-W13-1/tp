@@ -35,6 +35,7 @@ public class Cca {
      * @param name the new CCA name
      */
     public void setName(String name) {
+        assert name != null : "CCA name should not be null";
         this.name = name;
     }
 
@@ -43,6 +44,8 @@ public class Cca {
      * @param resident the resident to be added
      */
     public void addResidentToCca(Resident resident) throws ResidentAlreadyInCcaException {
+        assert registeredResidents != null : "Registered residents list should be initialized";
+        assert resident != null : "Resident should not be null";
         boolean alreadyIn = registeredResidents.stream()
                 .anyMatch(x -> x.getMatricNumber().equals(resident.getMatricNumber()));
         if (alreadyIn) {

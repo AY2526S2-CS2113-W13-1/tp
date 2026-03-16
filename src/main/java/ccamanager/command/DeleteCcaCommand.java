@@ -12,6 +12,7 @@ public class DeleteCcaCommand extends Command{
     private String ccaName;
 
     public DeleteCcaCommand(String ccaName) {
+        assert ccaName != null : "CCA name should not be null";
         this.ccaName = ccaName;
     }
 

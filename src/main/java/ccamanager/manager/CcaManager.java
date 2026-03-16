@@ -20,13 +20,18 @@ public class CcaManager {
      * @param ccaName Name of the CCA
      */
     public void addCCA(String ccaName) throws DuplicateCcaException {
+        assert ccaName != null : "CCA name should not be null";
+        assert !ccaName.isBlank() : "CCA name should not be blank";
         assert ccaList != null : "ccaList should be initialized";
         boolean isDuplicate = ccaList.stream()
                 .anyMatch(x -> x.getName().equalsIgnoreCase(ccaName));
         if (isDuplicate) {
             throw new DuplicateCcaException("CCA " + ccaName + " already exists.");
         }
+        int oldSize = ccaList.size();
         ccaList.add(new Cca(ccaName));
+        assert ccaList.size() == oldSize + 1 : "CCA list size should increase by 1 after adding";
+
         logger.log(Level.INFO, "Successfully added CCA: {0}", ccaName);
     }
 
@@ -45,9 +50,15 @@ public class CcaManager {
      * @throws CcaNotFoundException Exception if invalid CCA name is given
      */
     public void deleteCca(String ccaName) throws CcaNotFoundException {
+        assert ccaList != null : "ccaList should be initialized";
+        assert ccaName != null : "CCA name should not be null";
+        assert !ccaName.isBlank() : "CCA name should not be blank";
         for (int i = 0; i < ccaList.size(); i++) {
             if (ccaList.get(i).getName().equals(ccaName)) {
+                int oldSize = ccaList.size();
                 ccaList.remove(i);
+                assert ccaList.size() == oldSize - 1 : "CCA list size should decrease by 1 after deletion";
+
                 logger.log(Level.INFO, "Successfully deleted CCA: {0}", ccaName);
                 return;
             }

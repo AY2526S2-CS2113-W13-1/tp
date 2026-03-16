@@ -17,6 +17,8 @@ public class Resident {
      * @param name the resident's full name, e.g. "John Tan"
      */
     public Resident(String name,String matricNumber) {
+        assert name != null : "Resident name should not be null";
+        assert matricNumber != null : "Matric number should not be null";
         this.name = name;
         this.matricNumber=matricNumber;
     }
@@ -25,6 +27,7 @@ public class Resident {
      * @return the resident's name
      */
     public String getName() {
+        assert name != null : "Resident name should not be null";
         return name;
     }
 
@@ -50,6 +53,11 @@ public class Resident {
      * @param pointsEarned Number of points resident scored for the CCA
      */
     public void addCcaToResident(Cca cca, int pointsEarned) {
+        assert cca != null : "CCA should not be null";
+        assert pointsEarned >= 0 : "Points earned should be non-negative";
+        assert ccaRegisteredIn != null : "CCA list should be initialized";
+        assert points != null : "Points list should be initialized";
+
         ccaRegisteredIn.add(cca);
         points.add(pointsEarned);
     }

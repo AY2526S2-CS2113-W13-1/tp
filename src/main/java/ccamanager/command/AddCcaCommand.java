@@ -13,6 +13,7 @@ public class AddCcaCommand extends Command {
     private String ccaName;
 
     public AddCcaCommand(String ccaName) {
+        assert ccaName != null : "CCA name should not be null";
         this.ccaName = ccaName;
     }
 

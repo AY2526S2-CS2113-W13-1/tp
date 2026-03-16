@@ -14,6 +14,8 @@ public class AddResidentCommand extends Command{
     private String matricNumber;
 
     public AddResidentCommand(String residentName,String matricNumber){
+        assert residentName != null : "Resident name should not be null";
+        assert matricNumber != null : "Matric number should not be null";
         this.residentName=residentName;
         this.matricNumber=matricNumber;
     }
