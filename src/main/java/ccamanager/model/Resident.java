@@ -10,7 +10,7 @@ public class Resident {
 
     private String name;
     private String matricNumber;
-    private ArrayList<Cca> CcaRegisteredIn = new ArrayList<Cca>();
+    private ArrayList<Cca> ccaRegisteredIn = new ArrayList<Cca>();
     private ArrayList<Integer> points = new ArrayList<Integer>();
 
     /**
@@ -40,7 +40,7 @@ public class Resident {
      * @param cca CCA to add residents in
      */
     public void addCcaToResident(Cca cca) {
-        CcaRegisteredIn.add(cca);
+        ccaRegisteredIn.add(cca);
         points.add(0);
     }
 
@@ -50,7 +50,7 @@ public class Resident {
      * @param pointsEarned Number of points resident scored for the CCA
      */
     public void addCcaToResident(Cca cca, int pointsEarned) {
-        CcaRegisteredIn.add(cca);
+        ccaRegisteredIn.add(cca);
         points.add(pointsEarned);
     }
 
