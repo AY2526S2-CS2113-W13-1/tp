@@ -4,6 +4,8 @@ import ccamanager.manager.CcaManager;
 import ccamanager.manager.ResidentManager;
 import ccamanager.ui.Ui;
 
+import ccamanager.exceptions.DuplicateResidentException;
+
 /**
  * Command to add a resident and his CCA
  */
@@ -17,8 +19,12 @@ public class AddResidentCommand extends Command{
     }
 
     public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui ui) {
-        ResidentManager.addResident(residentName,matricNumber);
-        ui.showMessage("CCA added: " + residentName +" "+ matricNumber);
+        try {
+            residentManager.addResident(residentName, matricNumber);
+            ui.showMessage("Resident added: " + residentName + " " + matricNumber);
+        } catch (DuplicateResidentException e) {
+            ui.showError(e.getMessage());
+        }
     }
 
 
