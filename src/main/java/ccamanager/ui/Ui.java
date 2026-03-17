@@ -25,7 +25,10 @@ public class Ui {
      */
     public String readInput() {
         System.out.print("> ");
-        return scanner.nextLine().trim();
+        if (scanner.hasNextLine()) {
+            return scanner.nextLine().trim();
+        }
+        return "";
     }
 
 
