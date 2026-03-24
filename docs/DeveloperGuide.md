@@ -40,8 +40,7 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui u
 }
 ```
 ### Sequeunce Diagram
-<img width="550" height="381" alt="AddCca" src="https://github.com/user-attachments/assets/6eed8ab5-d334-45ed-8d02-1769cb8416b6" />
-
+![Add CCA Sequence Diagram](images/add-cca.png)
 
 ### Design Considerations
 
@@ -55,6 +54,40 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui u
 - Violates separation of concerns
 - Makes Parser overly complex
 - Reduces extensibility
+
+
+
+## View CCA Command
+
+### Overview
+
+The `view-cca` command displays the list of all CCAs stored in the system.
+
+Format:
+`view-cca`
+
+---
+
+### Implementation
+
+The `view-cca` command retrieves and displays all CCAs.
+
+- The `Parser` creates a `ViewCcaCommand` object.
+- `ViewCcaCommand.execute()` calls `CcaManager.getCCAList()`.
+- The retrieved list is passed to `Ui.showCcaList(...)` for display.
+
+```java
+@Override
+public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui ui) {
+    ArrayList<Cca> ccaList = ccaManager.getCCAList();
+    ui.showCcaList(ccaList);
+}
+
+```
+
+### Sequence Diagram 
+![Add CCA Sequence Diagram](images/view-cca.png)
+
 
 
 ## Product scope
