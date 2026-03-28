@@ -1,6 +1,7 @@
 package ccamanager.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents a hall resident.
@@ -75,6 +76,18 @@ public class Resident {
 
     public ArrayList<Integer> getPoints(){
         return points;
+    }
+
+    /**
+     * Returns a hashmap with the CCAs and the corresponding number of points that the resident has
+     * @return a hashmap with the CCAs and the corresponding number of points that the resident has
+     */
+    public HashMap<Cca, Integer> getCcaMap(){
+        HashMap<Cca, Integer> map = new HashMap<>();
+        for (int i = 0; i < ccaRegisteredIn.size(); i++) {
+            map.put(ccaRegisteredIn.get(i), points.get(i));
+        }
+        return map;
     }
 
     @Override
