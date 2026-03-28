@@ -113,8 +113,8 @@ The `view-resident` command retrieves and displays all residents.
      ui.showResidentList(residentList);
  }
 ```
-
-
+### Sequence Diagram
+![Add View Resident Sequence Diagram](images/view-resident.png)
 
 ## View Points Command
 
