@@ -50,6 +50,26 @@ Most popular CCAs:
 _________________________________________________________________________________
 ```
 
+### Viewing per-resident statistics: `resident-stats`
+Displays the total points for each resident and the most active residents across all CCAs.
+
+Format: `resident-stats`
+
+Example:
+
+`> resident-stats`
+
+```
+_________________________________________________________________________________
+Total points for each resident:
+1. John | 1234, total points: 9
+2. James | 4321, total points: 7
+
+Most active residents across all CCAs:
+1. John | 1234, total points: 9
+_________________________________________________________________________________
+```
+
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
