@@ -207,8 +207,8 @@ Format:
 - The `Parser` creates a `CcaStatsCommand` object.
 - `CcaStatsCommand.avgPoints()` computes the average points for each CCA.
 - `CcaStatsCommand.mostPopularCca()` finds the most popular CCA by finding the CCA with the highest average points.
-- `CcaStatsCommand.mostActiveResidents()` find the most active member of each CCA by taking the resident with the most points for that CCA.
-- If there are no CCAs in the first place, `CcaStatsCommand.execute()`passes a message to the user through `Ui.showMessage()`. Otherwise, it passes the above information to `Ui.showCcaStats()` for display.
+- `CcaStatsCommand.mostActiveResidents()` finds the most active member of each CCA by taking the resident with the most points for that CCA.
+- If there are no CCAs in the first place, `CcaStatsCommand.execute()` passes a message to the user through `Ui.showMessage()`. Otherwise, it passes the above information to `Ui.showCcaStats()` for display.
 
 ```java
 @Override
@@ -278,6 +278,70 @@ private static HashMap<Cca, Resident> mostActiveResidents(ArrayList<Cca> ccas) t
 ```
 ### Sequence Diagram
 ![Add CCA Statistics Sequence Diagram](images/cca-stats.png)
+
+## Resident Statistics Command
+
+### Overview
+
+The `resident-stats` command displays the total points for each resident and the most active residents across all CCAs
+
+Format:
+`resident-stats`
+
+---
+
+### Implementation
+
+- The `Parser` creates a `ResidentStatsCommand` object.
+- `ResidentStatsCommand.totalPoints()` computes the total points for each resident.
+- `ResdientStatsCommand.mostActiveResidents()` finds the most active residents across all CCAs based on their total points.
+- If there are no resdients in the first place, `ResidentStatsCommand.execute()`passes a message to the user through `Ui.showMessage()`. Otherwise, it passes the above information to `Ui.showResidentStats()` for display.
+
+```java
+@Override
+public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
+   ArrayList<Resident> residents = residentManager.getResidentList();
+   if (residents.isEmpty()) {
+      ui.showMessage("There are no residents currently. Please add residents using add-resident command");
+      return;
+   }
+   HashMap<Resident, Integer> totalPoints = totalPoints(residents);
+   ArrayList<Resident> mostActiveResident = mostActiveResidents(totalPoints);
+   ui.showResidentStats(totalPoints, mostActiveResident);
+}
+
+private static HashMap<Resident, Integer> totalPoints(ArrayList<Resident> residents) {
+   HashMap<Resident, Integer> totalPoints = new HashMap<>();
+   for (Resident resident : residents) {
+      ArrayList<Integer> points = resident.getPoints();
+      if (points.isEmpty()) {
+         totalPoints.put(resident, 0);
+      } else {
+         int sum = points.stream().mapToInt(Integer::intValue).sum();
+         totalPoints.put(resident, sum);
+      }
+   }
+   return totalPoints;
+}
+
+private static ArrayList<Resident> mostActiveResidents (HashMap<Resident, Integer> totalPoints) {
+   ArrayList<Resident> mostActiveResidents = new ArrayList<>();
+   int max = 0;
+   for (Resident resident : totalPoints.keySet()) {
+      if (totalPoints.get(resident) > max) {
+         max = totalPoints.get(resident);
+      }
+   }
+   for (Resident resident : totalPoints.keySet()) {
+      if (totalPoints.get(resident) == max) {
+         mostActiveResidents.add(resident);
+      }
+   }
+   return mostActiveResidents;
+}
+```
+### Sequence Diagram
+![Add Resident Statistics Sequence Diagram](images/resident-stats.png)
 
 ## Product scope
 ### Target user profile
