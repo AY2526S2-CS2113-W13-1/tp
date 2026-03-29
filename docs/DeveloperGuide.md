@@ -178,6 +178,9 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui u
 }
 ```
 
+### Sequence Diagram
+![delete-cca.png](images/delete-cca.png)
+
 ### Design Considerations
 
 - Command pattern is used to separate parsing and execution.
@@ -190,6 +193,97 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui u
     - Violates separation of concerns
     - Makes Parser overly complex
     - Reduces extensibility
+
+## Add Event Command
+
+### Overview
+
+The `add-event` command adds a new event under a specified CCA.
+
+Format:
+`add-event <event name> <cca name> <date/time>`
+
+---
+
+### Implementation
+
+The `add-event` command is implemented using the Command pattern.
+
+- The `Parser` creates an `AddEventCommand` object from user input.
+- `AddEventCommand.execute()` retrieves the corresponding CCA from `CcaManager`.
+- The event is added using `EventManager.addEvent(...)`.
+- If the CCA does not exist, a `CcaNotFoundException` is thrown and handled.
+
+```java
+@Override
+public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
+   try {
+      Cca cca = ccaManager.getCCAList().stream()
+              .filter(x -> x.getName().equals(ccaName))
+              .findFirst()
+              .orElseThrow(() -> new CcaNotFoundException(ccaName + " not found."));
+
+      eventManager.addEvent(eventName, cca, dateTime);
+
+      ui.showMessage("Event added: " + eventName + " for the CCA " + ccaName + ", during " + dateTime);
+
+   } catch (CcaNotFoundException e) {
+      ui.showError(e.getMessage());
+   }
+}
+```
+### Sequence Diagram
+![add-event.png](images/add-event.png)
+
+
+## Add Resident to Event Command
+
+### Overview
+
+The `add-resident-to-event` command adds an existing resident to a specific event under a CCA.
+
+Format:
+`add-resident-to-event <matric number> <event name> <cca name>`
+
+---
+
+### Implementation
+
+The command is implemented using the Command pattern.
+
+- The `Parser` creates an `AddResidentToEventCommand`.
+- The command retrieves the `Resident` from `ResidentManager`.
+- The corresponding `Cca` is retrieved from `CcaManager`.
+- The resident is added to the event using `EventManager.addResidentToEvent(...)`.
+- Exceptions are thrown if the resident, CCA, or event does not exist.
+
+```java
+@Override
+public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
+   try {
+      Resident resident = residentManager.getResidentList().stream()
+              .filter(r -> r.getMatricNumber().equalsIgnoreCase(matricNumber))
+              .findFirst()
+              .orElseThrow(() -> new ResidentNotFoundException(...));
+
+      Cca cca = ccaManager.getCCAList().stream()
+              .filter(c -> c.getName().equalsIgnoreCase(ccaName))
+              .findFirst()
+              .orElseThrow(() -> new CcaNotFoundException(...));
+
+      eventManager.addResidentToEvent(eventName, cca, resident);
+
+      ui.showMessage(...);
+
+   } catch (ResidentNotFoundException | CcaNotFoundException | EventNotFoundException e) {
+      ui.showError(e.getMessage());
+   }
+}
+```
+
+### Sequence Diagram
+
+![add-resident-to-cca.png](images/add-resident-to-cca.png)
 
 ## CCA Statistics Command
 
