@@ -4,12 +4,14 @@ import ccamanager.model.Cca;
 import ccamanager.model.Resident;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
 public class Ui {
 
-    private static final String DIVIDER = "____________________________________________________________";
+    private static final String DIVIDER = "_____________________________________________________________________" +
+            "____________";
     private final Scanner scanner;
     private String lastMessage;
 
@@ -35,7 +37,7 @@ public class Ui {
     public void showWelcome() {
         System.out.println(DIVIDER);
         System.out.println(" Welcome to CCA Ledger!");
-        System.out.println(" Type a command to get started. Type 'bye' to exit.");
+        System.out.println(" Type 'help' for available commands. Type 'bye' to exit.");
         System.out.println(DIVIDER);
     }
 
@@ -103,12 +105,13 @@ public class Ui {
         }
         System.out.println(DIVIDER);
     }
+
     public void showCcaPoints(ArrayList<Resident> residentList){
         System.out.println(DIVIDER);
         if (residentList.isEmpty()) {
             showMessage("There are no residents currently. Please add residents using add-resident command");
         } else {
-            System.out.println("Here is the complete list of all the residents :");
+            System.out.println("Here are the points of each resident:");
             for(int i = 1; i < residentList.size() + 1; i++) {
                 Resident resident = residentList.get(i-1);
                 ArrayList<Cca> residentCcas= resident.getCcas();
@@ -122,6 +125,54 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
+    /**
+     * Displays per-CCA statistics
+     * @param avgPoints a hashmap containing CCAs and the average points of the registered residents
+     * @param mostPopularCcas a list of the most popular CCAs based on their average points
+     * @param mostActiveResidents a hashmap containing CCAs and their most active members
+     */
+    public void showCcaStats(HashMap<Cca, Double> avgPoints, ArrayList<Cca> mostPopularCcas, HashMap<Cca,
+            Resident> mostActiveResidents) {
+        System.out.println(DIVIDER);
+        System.out.println("Average points and most active resident per CCA:");
+        int index = 1;
+        for (Cca cca : avgPoints.keySet()) {
+            System.out.println(index + ". " + cca + ", average points: " + avgPoints.get(cca) + ", most active: " +
+                    mostActiveResidents.get(cca));
+            index++;
+        }
+        System.out.println();
+        System.out.println("Most popular CCAs:");
+        index = 1;
+        for (Cca cca : mostPopularCcas) {
+            System.out.println(index + ". " + cca + ", average points: " + avgPoints.get(cca));
+            index++;
+        }
+        System.out.println(DIVIDER);
+    }
+
+    /**
+     * Displays per-resident statistics
+     * @param totalPoints a hashmap containing residents and their total points across all CCAs
+     * @param mostActiveResident a list of the most active residents based on their total points
+     */
+    public void showResidentStats(HashMap<Resident, Integer> totalPoints, ArrayList<Resident> mostActiveResident) {
+        System.out.println(DIVIDER);
+        System.out.println("Total points for each resident:");
+        int index = 1;
+        for (Resident resident : totalPoints.keySet()) {
+            System.out.println(index + ". " + resident + ", total points: " + totalPoints.get(resident));
+            index++;
+        }
+        System.out.println();
+        System.out.println("Most active residents across all CCAs:");
+        index = 1;
+        for (Resident resident : mostActiveResident) {
+            System.out.println(index + ". " + resident + ", total points: " + totalPoints.get(resident));
+            index++;
+        }
+        System.out.println(DIVIDER);
+    }
 
     public String getLastMessage() {
         return lastMessage;
