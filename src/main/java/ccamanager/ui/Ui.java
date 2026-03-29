@@ -144,12 +144,6 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
-    public void showResidentStats(HashMap<String, Double> stats) {
-        System.out.println(DIVIDER);
-        // TODO: show resident stats
-        System.out.println(DIVIDER);
-    }
-
     public String getLastMessage() {
         return lastMessage;
     }
