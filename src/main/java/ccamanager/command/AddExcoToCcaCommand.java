@@ -20,10 +20,11 @@ public class AddExcoToCcaCommand extends Command {
     private final String ccaName;
 
     public AddExcoToCcaCommand(String matriculationNo, String ccaName) {
-        assert matriculationNo != null : "Matriculation number should not be null";
-        assert ccaName != null : "CCA name should not be null";
-        this.matriculationNo = matriculationNo;
-        this.ccaName = ccaName;
+        this.matriculationNo = matriculationNo != null ? matriculationNo.trim() : null;
+        this.ccaName = ccaName != null ? ccaName.trim() : null;
+
+        assert this.matriculationNo != null : "Matriculation number should not be null";
+        assert this.ccaName != null : "CCA name should not be null";
 
     }
 

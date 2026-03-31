@@ -58,6 +58,9 @@ public class Cca {
         return level;
     }
 
+    public ArrayList<Resident> getResidents(){return this.registeredResidents;}
+
+    public ArrayList<Resident> getExcos(){return this.excoMembers;}
     /**
      * @param level the level of the CCA
      */
@@ -111,6 +114,12 @@ public class Cca {
                     + " is already a EXCO of " + this.name + ".");
         }
         excoMembers.add(resident);
+
+        boolean alreadyIn = registeredResidents.stream()
+                .anyMatch(x -> x.getMatricNumber().equals(resident.getMatricNumber()));
+        if (!alreadyIn) {
+            this.addResidentToCca(resident);
+        }
         logger.log(Level.INFO, "Resident " + resident.getMatricNumber() + " added successfully as an EXCO of the CCA " + name);
     }
 

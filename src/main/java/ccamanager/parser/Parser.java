@@ -47,7 +47,11 @@ public class Parser {
 
         case "view-cca":
             return new ViewCcaCommand();
-
+        case "view-exco":
+            if (parts.length < 2 || parts[1].isBlank()){
+                return new UnknownCommand("Usage: view-cca <cca-name>");
+            }
+            return new ViewCcaExco(parts[1]);
         case "delete-cca":
             if (parts.length < 2 || parts[1].isBlank()) {
                 return new UnknownCommand("Usage: delete-cca <cca name>");
