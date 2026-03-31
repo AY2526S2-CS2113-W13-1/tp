@@ -14,14 +14,14 @@ CcaLedger follows a **layered, command-driven architecture** modelled after the 
 
 The diagram above shows the six layers and their relationships. The table below summarises each layer's role.
 
-| Layer | Key Classes | Responsibility |
-|-------|-------------|----------------|
-| Entry Point | `Main` | Instantiates `CcaLedger` and calls `run()`. |
-| Orchestration | `CcaLedger` | Owns the main loop; coordinates all components. |
-| UI & Parsing | `Ui`, `Parser` | Handles console I/O; translates input into `Command` objects. |
-| Command | `Command` and subclasses | Encapsulates a single user-facing operation. |
-| Managers | `CcaManager`, `ResidentManager`, `EventManager` | Holds and mutates application state. |
-| Domain Model | `Cca`, `Resident`, `Event`, `CcaLevel` | Plain data objects with no business logic. |
+| Layer         | Key Classes                                     | Responsibility                                                |
+|---------------|-------------------------------------------------|---------------------------------------------------------------|
+| Entry Point   | `Main`                                          | Instantiates `CcaLedger` and calls `run()`.                   |
+| Orchestration | `CcaLedger`                                     | Owns the main loop; coordinates all components.               |
+| UI & Parsing  | `Ui`, `Parser`                                  | Handles console I/O; translates input into `Command` objects. |
+| Command       | `Command` and subclasses                        | Encapsulates a single user-facing operation.                  |
+| Managers      | `CcaManager`, `ResidentManager`, `EventManager` | Holds and mutates application state.                          |
+| Domain Model  | `Cca`, `Resident`, `Event`, `CcaLevel`          | Plain data objects with no business logic.                    |
 
 **How a command executes (happy path):**
 
