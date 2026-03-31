@@ -178,6 +178,9 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui u
 }
 ```
 
+### Sequence Diagram
+![delete-cca.png](images/delete-cca.png)
+
 ### Design Considerations
 
 - Command pattern is used to separate parsing and execution.
@@ -190,6 +193,97 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Ui u
     - Violates separation of concerns
     - Makes Parser overly complex
     - Reduces extensibility
+
+## Add Event Command
+
+### Overview
+
+The `add-event` command adds a new event under a specified CCA.
+
+Format:
+`add-event <event name> <cca name> <date/time>`
+
+---
+
+### Implementation
+
+The `add-event` command is implemented using the Command pattern.
+
+- The `Parser` creates an `AddEventCommand` object from user input.
+- `AddEventCommand.execute()` retrieves the corresponding CCA from `CcaManager`.
+- The event is added using `EventManager.addEvent(...)`.
+- If the CCA does not exist, a `CcaNotFoundException` is thrown and handled.
+
+```java
+@Override
+public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
+   try {
+      Cca cca = ccaManager.getCCAList().stream()
+              .filter(x -> x.getName().equals(ccaName))
+              .findFirst()
+              .orElseThrow(() -> new CcaNotFoundException(ccaName + " not found."));
+
+      eventManager.addEvent(eventName, cca, dateTime);
+
+      ui.showMessage("Event added: " + eventName + " for the CCA " + ccaName + ", during " + dateTime);
+
+   } catch (CcaNotFoundException e) {
+      ui.showError(e.getMessage());
+   }
+}
+```
+### Sequence Diagram
+![add-event.png](images/add-event.png)
+
+
+## Add Resident to Event Command
+
+### Overview
+
+The `add-resident-to-event` command adds an existing resident to a specific event under a CCA.
+
+Format:
+`add-resident-to-event <matric number> <event name> <cca name>`
+
+---
+
+### Implementation
+
+The command is implemented using the Command pattern.
+
+- The `Parser` creates an `AddResidentToEventCommand`.
+- The command retrieves the `Resident` from `ResidentManager`.
+- The corresponding `Cca` is retrieved from `CcaManager`.
+- The resident is added to the event using `EventManager.addResidentToEvent(...)`.
+- Exceptions are thrown if the resident, CCA, or event does not exist.
+
+```java
+@Override
+public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
+   try {
+      Resident resident = residentManager.getResidentList().stream()
+              .filter(r -> r.getMatricNumber().equalsIgnoreCase(matricNumber))
+              .findFirst()
+              .orElseThrow(() -> new ResidentNotFoundException(...));
+
+      Cca cca = ccaManager.getCCAList().stream()
+              .filter(c -> c.getName().equalsIgnoreCase(ccaName))
+              .findFirst()
+              .orElseThrow(() -> new CcaNotFoundException(...));
+
+      eventManager.addResidentToEvent(eventName, cca, resident);
+
+      ui.showMessage(...);
+
+   } catch (ResidentNotFoundException | CcaNotFoundException | EventNotFoundException e) {
+      ui.showError(e.getMessage());
+   }
+}
+```
+
+### Sequence Diagram
+
+![add-resident-to-cca.png](images/add-resident-to-cca.png)
 
 ## CCA Statistics Command
 
@@ -222,58 +316,6 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Even
    } catch (IllegalArgumentException e) {
       ui.showMessage("There are no CCAs currently. Please add CCAs using add-cca command");
    }
-}
-
-private static HashMap<Cca, Double> avgPoints(ArrayList<Cca> ccas) throws IllegalArgumentException {
-   if (ccas.isEmpty()) {
-      throw new IllegalArgumentException();
-   }
-   HashMap<Cca, Double> avgPoints = new HashMap<>();
-   for (Cca cca : ccas) {
-      ArrayList<Resident> registeredResidents = cca.getRegisteredResidents();
-      double totalPoints = 0;
-      for (Resident resident : registeredResidents) {
-         totalPoints += resident.getCcaMap().get(cca);
-      }
-      double avg = totalPoints / registeredResidents.size();
-      avgPoints.put(cca, avg);
-   }
-   return avgPoints;
-}
-
-private static Cca mostPopularCca(HashMap<Cca, Double> avgPoints) throws IllegalArgumentException {
-   if  (avgPoints.isEmpty()) {
-      throw  new IllegalArgumentException();
-   }
-   Cca mostPopularCca = null;
-   for (Cca cca : avgPoints.keySet()) {
-      if (mostPopularCca == null) {
-         mostPopularCca = cca;
-      } else if (avgPoints.get(cca) > avgPoints.get(mostPopularCca)) {
-         mostPopularCca = cca;
-      }
-   }
-   return mostPopularCca;
-}
-
-private static HashMap<Cca, Resident> mostActiveResidents(ArrayList<Cca> ccas) throws IllegalArgumentException {
-   if (ccas.isEmpty()) {
-      throw new IllegalArgumentException();
-   }
-   HashMap<Cca, Resident> mostActiveResidents = new HashMap<>();
-   for (Cca cca : ccas) {
-      ArrayList<Resident> registeredResidents = cca.getRegisteredResidents();
-      Resident mostActiveResident = null;
-      for (Resident resident : registeredResidents) {
-         if (mostActiveResident == null) {
-            mostActiveResident = resident;
-         } else if (resident.getCcaMap().get(cca) > mostActiveResident.getCcaMap().get(cca)) {
-            mostActiveResident = resident;
-         }
-      }
-      mostActiveResidents.put(cca, mostActiveResident);
-   }
-   return mostActiveResidents;
 }
 ```
 ### Sequence Diagram
@@ -309,36 +351,6 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Even
    ArrayList<Resident> mostActiveResident = mostActiveResidents(totalPoints);
    ui.showResidentStats(totalPoints, mostActiveResident);
 }
-
-private static HashMap<Resident, Integer> totalPoints(ArrayList<Resident> residents) {
-   HashMap<Resident, Integer> totalPoints = new HashMap<>();
-   for (Resident resident : residents) {
-      ArrayList<Integer> points = resident.getPoints();
-      if (points.isEmpty()) {
-         totalPoints.put(resident, 0);
-      } else {
-         int sum = points.stream().mapToInt(Integer::intValue).sum();
-         totalPoints.put(resident, sum);
-      }
-   }
-   return totalPoints;
-}
-
-private static ArrayList<Resident> mostActiveResidents (HashMap<Resident, Integer> totalPoints) {
-   ArrayList<Resident> mostActiveResidents = new ArrayList<>();
-   int max = 0;
-   for (Resident resident : totalPoints.keySet()) {
-      if (totalPoints.get(resident) > max) {
-         max = totalPoints.get(resident);
-      }
-   }
-   for (Resident resident : totalPoints.keySet()) {
-      if (totalPoints.get(resident) == max) {
-         mostActiveResidents.add(resident);
-      }
-   }
-   return mostActiveResidents;
-}
 ```
 ### Sequence Diagram
 ![Add Resident Statistics Sequence Diagram](images/resident-stats.png)
@@ -361,21 +373,23 @@ The `help` command is implemented using the Command pattern.
 ```java
 @Override
  public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
-     String help = "Here is a list of all commands:\n" +
-             "> add-cca <cca name> <level (HIGH, MEDIUM, LOW or UNKNOWN)>\n" +
-             "> view-cca\n" +
-             "> delete-cca <cca name>\n" +
-             "> add-event <event name> <cca name> <data time>\n" +
-             "> add-resident <name> <matric number>\n" +
-             "> view-resident\n" +
-             "> add-resident-to-cca <matric number> <cca name> <points>\n" +
-             "> add-resident-to-event <matric number> <event name> <cca name>\n" +
-             "> view-points\n" +
-             "> cca-stats\n" +
-             "> resident-stats\n" +
-             "> help\n" +
-             "> bye";
-     ui.showMessage(help);
+    String help = "Here is a list of all commands:\n" +
+            "> add-cca <cca name> <level (HIGH, MEDIUM, LOW or UNKNOWN)>\n" +
+            "> view-cca\n" +
+            "> delete-cca <cca name>\n" +
+            "> add-event <event name> <cca name> <data time>\n" +
+            "> add-resident <name> <matric number>\n" +
+            "> view-resident\n" +
+            "> add-resident-to-cca <matric number> <cca name> <points>\n" +
+            "> add-resident-to-event <matric number> <event name> <cca name>\n" +
+            "> view-points\n" +
+            "> cca-stats\n" +
+            "> resident-stats\n" +
+            "> help\n" +
+            "> bye";
+    ui.showMessage(help);
+}
+ ```
 
 ## Product scope
 ### Target user profile

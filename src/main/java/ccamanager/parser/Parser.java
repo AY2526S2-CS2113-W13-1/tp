@@ -1,20 +1,25 @@
 package ccamanager.parser;
 
 import ccamanager.command.AddCcaCommand;
-import ccamanager.command.AddEventCommand;
 import ccamanager.command.AddResidentCommand;
 import ccamanager.command.AddResidentToCcaCommand;
-import ccamanager.command.AddResidentToEventCommand;
-import ccamanager.command.CcaStatsCommand;
-import ccamanager.command.Command;
-import ccamanager.command.DeleteCcaCommand;
 import ccamanager.command.ExitCommand;
-import ccamanager.command.ResidentStatsCommand;
-import ccamanager.command.HelpCommand;
-import ccamanager.command.UnknownCommand;
+import ccamanager.command.DeleteCcaCommand;
 import ccamanager.command.ViewCcaCommand;
-import ccamanager.command.ViewPointsCommand;
 import ccamanager.command.ViewResidentCommand;
+import ccamanager.command.ViewMyEvents;
+import ccamanager.command.DeleteResidentCommand;
+import ccamanager.command.Command;
+import ccamanager.command.UnknownCommand;
+import ccamanager.command.AddEventCommand;
+import ccamanager.command.AddResidentToEventCommand;
+import ccamanager.command.ViewCcaEvents;
+import ccamanager.command.HelpCommand;
+import ccamanager.command.ViewPointsCommand;
+import ccamanager.command.CcaStatsCommand;
+import ccamanager.command.ResidentStatsCommand;
+
+
 
 import ccamanager.enumerations.CcaLevel;
 
@@ -90,7 +95,11 @@ public class Parser {
                 return new UnknownCommand("Matric number cannot be empty.");
             }
             return new AddResidentCommand(parts[1], parts[2]);
-
+        case "delete-resident":
+            if (parts[1].isBlank()) {
+                return new UnknownCommand("Resident name cannot be empty.");
+            }
+            return new DeleteResidentCommand(parts[1]);
         case "add-resident-to-event":
             if (parts.length < 4) {
                 return new UnknownCommand("Usage: add-resident-to-event <matric number> <event name> <cca name>");
@@ -129,6 +138,16 @@ public class Parser {
             return new CcaStatsCommand();
         case "resident-stats":
             return new ResidentStatsCommand();
+        case "view-cca-event":
+            if (parts[1].isBlank()) {
+                return new UnknownCommand("Resident name cannot be empty.");
+            }
+            return new ViewCcaEvents(parts[1]);
+        case "view-my-event":
+            if (parts[1].isBlank()) {
+                return new UnknownCommand("Resident name cannot be empty.");
+            }
+            return new ViewMyEvents(parts[1]);
         case "help":
             return new HelpCommand();
         default:
