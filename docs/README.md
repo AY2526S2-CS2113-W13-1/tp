@@ -1,6 +1,6 @@
-# Duke
+# CCA Ledger
 
-{Give product intro here}
+CLI based application to aid hall leader and CCA leaders manage CCA events and resident points.
 
 Useful links:
 * [User Guide](UserGuide.md)
