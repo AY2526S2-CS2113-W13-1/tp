@@ -696,6 +696,116 @@ public void execute(CcaManager ccaManager, ResidentManager residentManager, Even
 ### Sequence Diagram
 ![view-cca-events.png](images/view-cca-events.png)
 
+---
+
+## Exception Handling
+
+### Overview
+
+All custom exceptions in CcaLedger are defined under the `ccamanager.exceptions` package. The hierarchy is designed so that most exceptions can be caught uniformly via the base `CcaLedgerException`, while two special cases (`EventNotFoundException` and `DuplicateEventException`) sit outside that hierarchy for specific reasons.
+
+---
+### Exception Hierarchy
+
+**`CcaLedgerException`** is the project's primary base class, extending Java's checked `Exception`. All domain-specific errors that commands are expected to catch and handle extend from it. This allows any command's `execute()` method to catch `CcaLedgerException` as a single fallback if needed, while still being able to handle individual subtypes for fine-grained messaging.
+```java
+public class CcaLedgerException extends Exception {
+    public CcaLedgerException(String message) {
+        super(message);
+    }
+}
+```
+
+**`EventNotFoundException`** extends `Exception` directly rather than `CcaLedgerException`. This is an intentional design choice to keep event-related lookup errors distinct from the broader CCA management error family.
+
+**`DuplicateEventException`** extends `RuntimeException`, making it an *unchecked* exception. Unlike other duplicate-detection cases, this does not need to be declared in method signatures or explicitly caught — it surfaces as a programming error rather than a recoverable user input error.
+
+---
+### Exception Reference
+
+| Exception | Parent | When thrown |
+|---|---|---|
+| `CcaLedgerException` | `Exception` | Base class — not thrown directly |
+| `CcaNotFoundException` | `CcaLedgerException` | A CCA name does not match any stored CCA |
+| `DuplicateCcaException` | `CcaLedgerException` | An `add-cca` command names a CCA that already exists |
+| `InvalidCcaLevelException` | `CcaLedgerException` | The level argument is not one of `HIGH`, `MEDIUM`, `LOW`, `UNKNOWN` |
+| `DuplicateResidentException` | `CcaLedgerException` | An `add-resident` command uses a matric number already in the system |
+| `ResidentNotFoundException` | `CcaLedgerException` | A matric number does not match any stored resident |
+| `ResidentAlreadyInCcaException` | `CcaLedgerException` | A resident is added to a CCA they already belong to |
+| `InvalidCommandException` | `CcaLedgerException` | The parser receives input it cannot map to any command |
+| `EventNotFoundException` | `Exception` | An event name does not match any stored event |
+| `DuplicateEventException` | `RuntimeException` | An event with the same name already exists (unchecked) |
+
+---
+
+### Design Considerations
+Using a shared `CcaLedgerException` base allows commands to write clean catch blocks. A command that calls into multiple managers (like `AddResidentToEventCommand`) can catch all recoverable domain errors in a single multi-catch clause, rather than needing separate handlers for each type:
+```java
+@Override
+public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
+    try {
+        // ... command logic
+    } catch (ResidentNotFoundException | CcaNotFoundException | EventNotFoundException e) {
+        ui.showError(e.getMessage());
+    }
+}
+```
+
+All exception classes are minimal by design — they only call `super(message)` and carry no additional state. Error context is passed entirely through the message string, which keeps the domain model lean and the `Ui` layer solely responsible for display.
+
+---
+
+---
+
+### Input Validation vs. Exception Handling
+
+CcaLedger uses two distinct layers of error handling, which work together:
+
+**Layer 1 — `Parser` (structural validation):** Before any command object is created, `Parser.parse()` checks that the correct number of arguments is present and that no argument is blank. If validation fails, it returns an `UnknownCommand` with a usage hint rather than throwing an exception. No domain exceptions are involved at this stage.
+
+For example, `add-cca` is validated in the parser as follows:
+```java
+case "add-cca":
+    if (parts.length < 3 || parts[1].isBlank() || parts[2].isBlank()) {
+        return new UnknownCommand("Usage: add-cca <cca name> <level>");
+    }
+    String name = parts[1];
+    CcaLevel level = getCcaLevel(parts[2]);
+    return new AddCcaCommand(name, level);
+```
+
+The `getCcaLevel()` helper also silently falls back to `CcaLevel.UNKNOWN` when an unrecognised level string is entered, logging a warning rather than surfacing an error to the user at parse time.
+
+**Layer 2 — `Command.execute()` (domain validation):** Once a valid command object reaches `execute()`, domain exceptions are thrown by the manager or model layer if business rules are violated (e.g. duplicate CCA, resident not found). These are caught inside `execute()` and displayed to the user via `Ui.showError()`.
+
+The `CcaLedger` run loop itself is intentionally kept free of any exception handling — it only coordinates parsing and execution, delegating all error display to `Ui`:
+```java
+while (isRunning) {
+    String input = ui.readInput();
+    Command command = parser.parse(input);
+    command.execute(ccaManager, residentManager, eventManager, ui);
+    isRunning = !command.isExit();
+}
+```
+
+This separation ensures that `Parser` never needs to know about domain state, and `CcaLedger` never needs to know about error formatting.
+
+---
+
+### Where Each Exception Is Used
+
+| Exception | Commands involved | Triggered by |
+|---|---|---|
+| `CcaNotFoundException` | `AddCcaCommand`, `DeleteCcaCommand`, `AddEventCommand`, `AddResidentToCcaCommand`, `AddExcoToCcaCommand`, `AddResidentToEventCommand`, `ViewCcaExco` | CCA name not matching any stored CCA |
+| `DuplicateCcaException` | `AddCcaCommand` | `CcaManager.addCCA()` when the CCA name already exists |
+| `InvalidCcaLevelException` | `AddCcaCommand` | `CcaManager.addCCA()` when the level string is invalid; `Parser.getCcaLevel()` falls back to `UNKNOWN` silently before this point |
+| `DuplicateResidentException` | `AddResidentCommand` | `ResidentManager.addResident()` when the matric number already exists |
+| `ResidentNotFoundException` | `DeleteResidentCommand`, `AddResidentToCcaCommand`, `AddExcoToCcaCommand`, `AddResidentToEventCommand` | Matric number not matching any stored resident |
+| `ResidentAlreadyInCcaException` | `AddResidentToCcaCommand`, `AddExcoToCcaCommand` | `Cca.addResidentToCca()` when the resident already belongs to that CCA |
+| `InvalidCommandException` | `Parser` | Input that cannot be mapped to any known command; `Parser` returns `UnknownCommand` in most cases instead of throwing |
+| `EventNotFoundException` | `AddResidentToEventCommand` | `EventManager.addResidentToEvent()` when the event name does not match any stored event |
+| `DuplicateEventException` | `EventManager` | `EventManager.addEvent()` when an event with the same name already exists; unchecked, so not declared in method signatures |
+
 ## Product scope
 ### Target user profile
 
