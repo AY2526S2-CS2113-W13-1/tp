@@ -1,4 +1,6 @@
 package ccamanager;
+import java.util.logging.LogManager;
+
 
 /**
  * Entry point for CCA Ledger.
@@ -7,6 +9,7 @@ package ccamanager;
 public class Main {
 
     public static void main(String[] args) {
+        LogManager.getLogManager().reset();
         assert false : "dummy assertion set to fail";
         new CcaLedger().run();
     }
