@@ -47,8 +47,9 @@ public class CcaStatsCommandTest {
         ArrayList<Cca> ccas = ccaManager.getCCAList();
         assert ccas.size() == 2 : "There should be 2 CCAs.";
         assert residentManager.getResidentList().size() == 2 :  "There should be 2 residents.";
-        assertEquals("{Basketball(HIGH): 2 residents=8.5, Football(MEDIUM): 0 residents=0.0}",
-                CcaStatsCommand.avgPoints(ccas).toString());
+        String result = CcaStatsCommand.avgPoints(ccas).toString();
+        assertTrue(result.equals("{Basketball(HIGH): 2 residents=8.5, Football(MEDIUM): 0 residents=0.0}") ||
+                result.equals("{Football(MEDIUM): 0 residents=0.0, Basketball(HIGH): 2 residents=8.5}"));
     }
 
     @Test
@@ -88,8 +89,9 @@ public class CcaStatsCommandTest {
         assert ccas.size() == 3 : "There should be 3 CCAs.";
         assert residentManager.getResidentList().size() == 3 : "There should be 3 residents.";
         HashMap<Cca, Double> avgPoints = CcaStatsCommand.avgPoints(ccas);
-        assertEquals("[Basketball(HIGH): 1 residents, Football(MEDIUM): 1 residents]",
-                CcaStatsCommand.mostPopularCcas(avgPoints).toString());
+        String result = CcaStatsCommand.mostPopularCcas(avgPoints).toString();
+        assertTrue(result.equals("[Basketball(HIGH): 1 residents, Football(MEDIUM): 1 residents]") ||
+                result.equals("[Football(MEDIUM): 1 residents, Basketball(HIGH): 1 residents]"));
     }
 
     @Test
@@ -118,8 +120,9 @@ public class CcaStatsCommandTest {
         ArrayList<Cca> ccas = ccaManager.getCCAList();
         assert ccas.size() == 2 :  "There should be 2 CCAs.";
         assert residentManager.getResidentList().size() == 3 :  "There should be 3 residents.";
-        assertEquals("{Tennis(LOW): 1 residents=Jane | 5678, Basketball(HIGH): 2 residents=John | 1234}",
-                CcaStatsCommand.mostActiveResidents(ccas).toString());
+        String result = CcaStatsCommand.mostActiveResidents(ccas).toString();
+        assertTrue(result.equals("{Tennis(LOW): 1 residents=Jane | 5678, Basketball(HIGH): 2 residents=John | 1234}")
+                || result.equals("{Basketball(HIGH): 2 residents=John | 1234, Tennis(LOW): 1 residents=Jane | 5678}"));
     }
 
     @Test

@@ -48,7 +48,9 @@ public class ResidentStatsCommandTest {
         ArrayList<Resident> residents = residentManager.getResidentList();
         assert residents.size() == 2 : "There should be 2 residents.";
         assert ccaManager.getCCAList().size() == 2 : "There should be 2 CCAs.";
-        assertEquals("{James | 4321=17, John | 1234=9}", ResidentStatsCommand.totalPoints(residents).toString());
+        String result = ResidentStatsCommand.totalPoints(residents).toString();
+        assertTrue(result.equals("{James | 4321=17, John | 1234=9}") ||
+                result.equals("{John | 1234=9, James | 4321=17}"));
     }
 
     @Test
@@ -88,8 +90,9 @@ public class ResidentStatsCommandTest {
         assert residents.size() == 3 :  "There should be 3 residents.";
         assert ccaManager.getCCAList().size() == 3 :  "There should be 3 CCAs.";
         HashMap<Resident, Integer> totalPoints = ResidentStatsCommand.totalPoints(residents);
-        assertEquals("[James | 4321, John | 1234]",
-                ResidentStatsCommand.mostActiveResidents(totalPoints).toString());
+        String result = ResidentStatsCommand.mostActiveResidents(totalPoints).toString();
+        assertTrue(result.equals("[James | 4321, John | 1234]") ||
+                result.equals("[John | 1234, James | 4321]"));
     }
 
     @Test
