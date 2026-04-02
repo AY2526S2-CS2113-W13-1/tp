@@ -49,10 +49,8 @@ public class CcaStatsCommandTest {
         ArrayList<Cca> ccas = ccaManager.getCCAList();
         assert ccas.size() == 2 : "There should be 2 CCAs.";
         assert residentManager.getResidentList().size() == 2 :  "There should be 2 residents.";
-        HashMap<Cca, Double> expectedAvgPoints = new HashMap<>();
-        expectedAvgPoints.put(new Cca("Basketball", HIGH), 8.5);
-        expectedAvgPoints.put(new Cca("Football", MEDIUM), 0.0);
-        assertEquals(expectedAvgPoints.toString(), CcaStatsCommand.avgPoints(ccas).toString());
+        assertEquals("{Basketball(HIGH): 2 residents=8.5, Football(MEDIUM): 0 residents=0.0}",
+                CcaStatsCommand.avgPoints(ccas).toString());
     }
 
     @Test
@@ -92,10 +90,8 @@ public class CcaStatsCommandTest {
         assert ccas.size() == 3 : "There should be 3 CCAs.";
         assert residentManager.getResidentList().size() == 3 : "There should be 3 residents.";
         HashMap<Cca, Double> avgPoints = CcaStatsCommand.avgPoints(ccas);
-        ArrayList<Cca> expectedMostPopularCcas = new ArrayList<>();
-        expectedMostPopularCcas.add(new Cca("Basketball", HIGH));
-        expectedMostPopularCcas.add(new Cca("Football", MEDIUM));
-        assertEquals(expectedMostPopularCcas.toString(), CcaStatsCommand.mostPopularCcas(avgPoints).toString());
+        assertEquals("[Football(MEDIUM): 1 residents, Basketball(HIGH): 1 residents]",
+                CcaStatsCommand.mostPopularCcas(avgPoints).toString());
     }
 
     @Test
@@ -124,10 +120,8 @@ public class CcaStatsCommandTest {
         ArrayList<Cca> ccas = ccaManager.getCCAList();
         assert ccas.size() == 2 :  "There should be 2 CCAs.";
         assert residentManager.getResidentList().size() == 3 :  "There should be 3 residents.";
-        HashMap<Cca, Resident> expectedMostActiveResident = new HashMap<>();
-        expectedMostActiveResident.put(new Cca("Basketball", HIGH), new Resident("John", "1234"));
-        expectedMostActiveResident.put(new Cca("Tennis", HIGH), new Resident("Jane", "5678"));
-        assertEquals(expectedMostActiveResident.toString(), CcaStatsCommand.mostActiveResidents(ccas).toString());
+        assertEquals("{Basketball(HIGH): 2 residents=John | 1234, Tennis(LOW): 1 residents=Jane | 5678}",
+                CcaStatsCommand.mostActiveResidents(ccas).toString());
     }
 
     @Test
