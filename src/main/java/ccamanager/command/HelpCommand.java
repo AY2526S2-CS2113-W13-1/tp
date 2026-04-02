@@ -25,4 +25,9 @@ public class HelpCommand extends Command {
                 "> bye";
         ui.showMessage(help);
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }

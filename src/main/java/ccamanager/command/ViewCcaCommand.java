@@ -21,5 +21,10 @@ public class ViewCcaCommand extends Command {
         ArrayList<Cca> ccaList = ccaManager.getCCAList();
         ui.showCcaList(ccaList);
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }
 

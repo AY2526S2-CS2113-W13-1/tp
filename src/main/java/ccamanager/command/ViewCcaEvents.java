@@ -24,4 +24,9 @@ public class ViewCcaEvents extends Command{
         ArrayList <Event> ccaEvents = eventManager.viewCcaEvents(ccaName);
         ui.viewMatchingCcas(ccaEvents);
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }

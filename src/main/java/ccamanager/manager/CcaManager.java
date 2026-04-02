@@ -80,4 +80,10 @@ public class CcaManager {
         logger.log(Level.WARNING, "Failed to delete CCA: {0}. (Not an exisitng CCA).", ccaName);
         throw new CcaNotFoundException("The CCA " + ccaName + " does not exist, please enter a valid CCA name.");
     }
+
+    public Cca findByName(String name) {
+        return ccaList.stream()
+                .filter(c -> c.getName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
+    }
 }

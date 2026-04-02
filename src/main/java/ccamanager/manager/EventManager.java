@@ -89,6 +89,11 @@ public class EventManager {
         return matchingEvents;
     }
 
-
+    public Event findByNameAndCca(String eventName, String ccaName) {
+        return events.stream()
+                .filter(e -> e.getEventName().equalsIgnoreCase(eventName)
+                        && e.getCca().getName().equalsIgnoreCase(ccaName))
+                .findFirst().orElse(null);
+    }
 }
 

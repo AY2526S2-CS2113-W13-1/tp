@@ -62,4 +62,9 @@ public class ResidentStatsCommand extends Command {
         }
         return mostActiveResidents;
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }

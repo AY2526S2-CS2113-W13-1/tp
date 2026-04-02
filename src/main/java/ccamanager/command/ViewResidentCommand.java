@@ -25,5 +25,10 @@ public class ViewResidentCommand extends Command {
         ArrayList<Resident> residentList = residentManager.getResidentList();
         ui.showResidentList(residentList);
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }
 

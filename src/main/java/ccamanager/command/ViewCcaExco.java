@@ -36,4 +36,9 @@ public class ViewCcaExco extends Command {
             ui.showError(e.getMessage());
         }
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }

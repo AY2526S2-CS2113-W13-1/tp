@@ -92,4 +92,10 @@ public class ResidentManager {
         logger.log(Level.WARNING, "Failed to delete resident: {0}. (Not an exisitng resident).", residentName);
         throw new ResidentNotFoundException(residentName + " does not exist, please enter a valid CCA name.");
     }
+
+    public Resident findByMatric(String matric) {
+        return residents.stream()
+                .filter(r -> r.getMatricNumber().equalsIgnoreCase(matric))
+                .findFirst().orElse(null);
+    }
 }

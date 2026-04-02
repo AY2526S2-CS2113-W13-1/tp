@@ -24,5 +24,10 @@ public class UnknownCommand extends Command {
     public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
         ui.showError(message);
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }
 

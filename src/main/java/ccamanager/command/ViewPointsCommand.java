@@ -15,5 +15,10 @@ public class ViewPointsCommand extends Command{
         ArrayList<Resident> residentList = residentManager.getResidentList();
         ui.showCcaPoints(residentList);
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }
 

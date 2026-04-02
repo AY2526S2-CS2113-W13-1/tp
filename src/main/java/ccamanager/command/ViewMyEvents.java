@@ -25,4 +25,9 @@ public class ViewMyEvents extends Command {
         System.out.println("Hi "+ resident.getName()+", here are your events: ");
         ui.viewMyCcas(ccaEvents);
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }

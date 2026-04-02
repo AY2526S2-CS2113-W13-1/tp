@@ -99,4 +99,9 @@ public class CcaStatsCommand extends Command {
         }
         return mostActiveResidents;
     }
+
+    @Override
+    public boolean isReadOnly() {
+        return true;
+    }
 }
