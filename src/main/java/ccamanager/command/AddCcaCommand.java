@@ -35,7 +35,7 @@ public class AddCcaCommand extends Command {
     public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
         try {
             ccaManager.addCCA(ccaName, ccaLevel);
-            ui.showMessage("CCA added: " + ccaName + "(" + ccaLevel + ")");
+            ui.showMessage("CCA added: " + ccaName + " (" + ccaLevel + ")");
         } catch (DuplicateCcaException | InvalidCcaLevelException e) {
             ui.showError(e.getMessage());
         }

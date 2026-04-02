@@ -18,7 +18,7 @@ public class ParserTest {
 
     @Test
     void parse_addCca_success() {
-        assertInstanceOf(AddCcaCommand.class, parser.parse("add-cca Basketball HIGH"));
+        assertInstanceOf(AddCcaCommand.class, parser.parse("add-cca Basketball; HIGH"));
     }
 
     @Test
@@ -53,12 +53,12 @@ public class ParserTest {
 
     @Test
     void parse_addResident_success() {
-        assertInstanceOf(AddResidentCommand.class, parser.parse("add-resident John A1234567B"));
+        assertInstanceOf(AddResidentCommand.class, parser.parse("add-resident Raghu; A1234567B"));
     }
 
     @Test
     void parse_addResident_missingMatric() {
-        assertInstanceOf(UnknownCommand.class, parser.parse("add-resident John"));
+        assertInstanceOf(UnknownCommand.class, parser.parse("add-resident Ramesh"));
     }
 
     @Test
@@ -69,13 +69,13 @@ public class ParserTest {
     @Test
     void parse_addResidentToCca_success() {
         assertInstanceOf(AddResidentToCcaCommand.class,
-                parser.parse("add-resident-to-cca A1234567B Basketball 10"));
+                parser.parse("add-resident-to-cca A1234567B; Basketball; 10"));
     }
 
     @Test
     void parse_addResidentToCca_missingPoints() {
         assertInstanceOf(UnknownCommand.class,
-                parser.parse("add-resident-to-cca A1234567B Basketball"));
+                parser.parse("add-resident-to-cca A1234567B; Basketball"));
     }
 
     @Test

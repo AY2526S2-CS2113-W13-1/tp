@@ -44,128 +44,158 @@ public class Parser {
             return new UnknownCommand();
         }
 
+        String trimmedInput = input.trim();
+        int firstSpace = trimmedInput.indexOf(" ");
 
+        // Handle single-word commands (no arguments)
+        if (firstSpace == -1) {
+            String commandWord = trimmedInput.toLowerCase();
+            switch (commandWord) {
+            case "help":
+                return new HelpCommand();
+            case "bye":
+                return new ExitCommand();
+            case "view-cca":
+                return new ViewCcaCommand();
+            case "view-resident":
+                return new ViewResidentCommand();
+            case "view-points":
+                return new ViewPointsCommand();
+            case "cca-stats":
+                return new CcaStatsCommand();
+            case "resident-stats":
+                return new ResidentStatsCommand();
+            default:
+                return new UnknownCommand();
+            }
+        }
 
-        String[] parts = input.trim().split("\\s+");
-        String commandWord = parts[0].toLowerCase();
+        String commandWord = trimmedInput.substring(0, firstSpace).toLowerCase();
+        String rawArgs = trimmedInput.substring(firstSpace + 1).trim();
 
-        assert parts.length > 0 : "Non-blank input should produce at least one token";
+        String[] args = rawArgs.split(";");
 
+        for (int i = 0; i < args.length; i++) {
+            args[i] = args[i].trim();
+        }
 
+        assert args.length > 0 : "Non-blank input should produce at least one token";
 
         switch (commandWord) {
         case "add-cca":
-            if (parts.length < 3 || parts[1].isBlank() || parts[2].isBlank()) {
-                return new UnknownCommand("Usage: add-cca <cca name> <level>");
+            if (args.length < 2 || args[0].isBlank() || args[1].isBlank()) {
+                return new UnknownCommand("Usage: add-cca <cca name>; <level>");
             }
-            String name = parts[1];
-            CcaLevel level = getCcaLevel(parts[2]);
+            String name = args[0];
+            CcaLevel level = getCcaLevel(args[1]);
             return new AddCcaCommand(name, level);
 
-        case "view-cca":
-            return new ViewCcaCommand();
         case "view-exco":
-            if (parts.length < 2 || parts[1].isBlank()){
-                return new UnknownCommand("Usage: view-cca <cca-name>");
+            if (args.length < 1 || args[0].isBlank()){
+                return new UnknownCommand("Usage: view-exco <cca-name>");
             }
-            return new ViewCcaExco(parts[1]);
+            return new ViewCcaExco(args[0]);
+
         case "delete-cca":
-            if (parts.length < 2 || parts[1].isBlank()) {
+            if (args.length < 1 || args[0].isBlank()) {
                 return new UnknownCommand("Usage: delete-cca <cca name>");
             }
-            return new DeleteCcaCommand(parts[1]);
+            return new DeleteCcaCommand(args[0]);
 
         case "add-event":
-            if (parts.length < 4) {
-                return new UnknownCommand("Usage add-event <event name> <cca name> <data time>");
+            if (args.length < 3) {
+                return new UnknownCommand("Usage: add-event <event name>; <cca name>; <date time>");
             }
-            return new AddEventCommand(parts[1], parts[2], parts[3]);
-
-        case "bye":
-            return new ExitCommand();
-
-        case "view-resident":
-            return new ViewResidentCommand();
+            return new AddEventCommand(args[0], args[1], args[2]);
 
         case "add-resident":
-            if (parts.length < 3) {
-                return new UnknownCommand("Usage: add-resident <name> <matric number>");
+            if (args.length < 2) {
+                return new UnknownCommand("Usage: add-resident <name>; <matric number>");
             }
-            if (parts[1].isBlank()) {
+            if (args[0].isBlank()) {
                 return new UnknownCommand("Resident name cannot be empty.");
             }
-            if (parts[2].isBlank()) {
+            if (args[1].isBlank()) {
                 return new UnknownCommand("Matric number cannot be empty.");
             }
-            return new AddResidentCommand(parts[1], parts[2]);
+            return new AddResidentCommand(args[0], args[1]);
+
         case "delete-resident":
-            if (parts[1].isBlank()) {
+            if (args[0].isBlank()) {
                 return new UnknownCommand("Resident name cannot be empty.");
             }
-            return new DeleteResidentCommand(parts[1]);
-        case "add-resident-to-event":
-            if (parts.length < 4) {
-                return new UnknownCommand("Usage: add-resident-to-event <matric number> <event name> <cca name>");
-            }
+            return new DeleteResidentCommand(args[0]);
 
-            if (parts[1].isBlank()) {
+        case "add-resident-to-event":
+            if (args.length < 3) {
+                return new UnknownCommand("Usage: add-resident-to-event <matric>; <event>; <cca>");
+            }
+            if (args[0].isBlank()) {
                 return new UnknownCommand("Student number cannot be empty");
             }
-
-            if (parts[2].isBlank()) {
+            if (args[1].isBlank()) {
                 return new UnknownCommand("Event name cannot be empty");
             }
-
-            if (parts[3].isBlank()) {
+            if (args[2].isBlank()) {
                 return new UnknownCommand("CCA Name cannot be empty.");
             }
-            return new AddResidentToEventCommand(parts[1], parts[2], parts[3]);
+            return new AddResidentToEventCommand(args[0], args[1], args[2]);
 
         case "add-resident-to-cca":
-            if (parts.length < 4) {
-                return new UnknownCommand("Usage: add-resident-to-cca <matric number> <cca name> <points>");
+            if (args.length < 3) {
+                return new UnknownCommand("Usage: add-resident-to-cca <matric>; <cca>; <points>");
             }
-            if (parts[1].isBlank()) {
+            if (args[0].isBlank()) {
                 return new UnknownCommand("Matric number cannot be empty.");
             }
-            if (parts[2].isBlank()) {
+            if (args[1].isBlank()) {
                 return new UnknownCommand("CCA name cannot be empty.");
             }
-            if (parts[3].isBlank()) {
+            if (args[2].isBlank()) {
                 return new UnknownCommand("Points cannot be empty.");
             }
-            return new AddResidentToCcaCommand(parts[1], parts[2], parts[3]);
+            return new AddResidentToCcaCommand(args[0], args[1], args[2]);
+
         case "add-exco-to-cca":
-            if (parts.length < 3) {
-                return new UnknownCommand("Usage: add-exco-to-cca <matric number> <cca name>");
+            if (args.length < 2) {
+                return new UnknownCommand("Usage: add-exco-to-cca <matric number>; <cca name>");
             }
-            if (parts[1].isBlank()) {
+            if (args[0].isBlank()) {
                 return new UnknownCommand("Matric number cannot be empty.");
             }
-            if (parts[2].isBlank()) {
+            if (args[1].isBlank()) {
                 return new UnknownCommand("CCA name cannot be empty.");
             }
-            return new AddExcoToCcaCommand(parts[1], parts[2]);
-        case "view-points":
-            return new ViewPointsCommand();
-        case "cca-stats":
-            return new CcaStatsCommand();
-        case "resident-stats":
-            return new ResidentStatsCommand();
+            return new AddExcoToCcaCommand(args[0], args[1]);
+
         case "view-cca-event":
-            if (parts[1].isBlank()) {
-                return new UnknownCommand("Resident name cannot be empty.");
+            if (args[0].isBlank()) {
+                return new UnknownCommand("CCA name cannot be empty.");
             }
-            return new ViewCcaEvents(parts[1]);
+            return new ViewCcaEvents(args[0]);
+
         case "view-my-event":
-            if (parts[1].isBlank()) {
+            if (args[0].isBlank()) {
                 return new UnknownCommand("Resident name cannot be empty.");
             }
-            return new ViewMyEvents(parts[1]);
-        case "help":
-            return new HelpCommand();
+            return new ViewMyEvents(args[0]);
+
         default:
-            return new UnknownCommand();
+            // This captures cases like "help" (if not caught above) or completely unknown words
+            return parseSingleWordFallback(commandWord);
+        }
+    }
+
+    private Command parseSingleWordFallback(String commandWord) {
+        switch (commandWord) {
+        case "help": return new HelpCommand();
+        case "bye": return new ExitCommand();
+        case "view-cca": return new ViewCcaCommand();
+        case "view-resident": return new ViewResidentCommand();
+        case "view-points": return new ViewPointsCommand();
+        case "cca-stats": return new CcaStatsCommand();
+        case "resident-stats": return new ResidentStatsCommand();
+        default: return new UnknownCommand();
         }
     }
 
@@ -178,10 +208,8 @@ public class Parser {
         try {
             return CcaLevel.valueOf(ccaLevel.toUpperCase());
         } catch (IllegalArgumentException e) {
-            // Handle case where user typed "super-high" or something invalid
             logger.log(Level.WARNING, "Invalid CCA level entered: " + ccaLevel);
         }
         return CcaLevel.UNKNOWN;
     }
 }
-
