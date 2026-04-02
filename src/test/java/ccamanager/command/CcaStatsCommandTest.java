@@ -47,8 +47,8 @@ public class CcaStatsCommandTest {
         Command addJamesToBasketball = parser.parse("add-resident-to-cca 4321 Basketball 8");
         addJamesToBasketball.execute(ccaManager, residentManager, eventManager, ui);
         ArrayList<Cca> ccas = ccaManager.getCCAList();
-        assert ccas.size() == 2;
-        assert residentManager.getResidentList().size() == 2;
+        assert ccas.size() == 2 : "There should be 2 CCAs.";
+        assert residentManager.getResidentList().size() == 2 :  "There should be 2 residents.";
         HashMap<Cca, Double> expectedAvgPoints = new HashMap<>();
         expectedAvgPoints.put(new Cca("Basketball", HIGH), 8.5);
         expectedAvgPoints.put(new Cca("Football", MEDIUM), 0.0);
@@ -58,7 +58,7 @@ public class CcaStatsCommandTest {
     @Test
     void avgPoints_noCcas_failure() {
         ArrayList<Cca> ccas = ccaManager.getCCAList();
-        assert ccas.isEmpty();
+        assert ccas.isEmpty() : "There should be no CCAs.";
         boolean caughtException = false;
         try {
             HashMap<Cca, Double> avgPoints = CcaStatsCommand.avgPoints(ccas);
@@ -89,8 +89,8 @@ public class CcaStatsCommandTest {
         Command addJaneToTennis = parser.parse("add-resident-to-cca 5678 Tennis 8");
         addJaneToTennis.execute(ccaManager, residentManager, eventManager, ui);
         ArrayList<Cca> ccas = ccaManager.getCCAList();
-        assert ccas.size() == 3;
-        assert residentManager.getResidentList().size() == 3;
+        assert ccas.size() == 3 : "There should be 3 CCAs.";
+        assert residentManager.getResidentList().size() == 3 : "There should be 3 residents.";
         HashMap<Cca, Double> avgPoints = CcaStatsCommand.avgPoints(ccas);
         ArrayList<Cca> expectedMostPopularCcas = new ArrayList<>();
         expectedMostPopularCcas.add(new Cca("Basketball", HIGH));
@@ -122,8 +122,8 @@ public class CcaStatsCommandTest {
         Command addJaneToTennis = parser.parse("add-resident-to-cca 5678 Tennis 8");
         addJaneToTennis.execute(ccaManager, residentManager, eventManager, ui);
         ArrayList<Cca> ccas = ccaManager.getCCAList();
-        assert ccas.size() == 2;
-        assert residentManager.getResidentList().size() == 3;
+        assert ccas.size() == 2 :  "There should be 2 CCAs.";
+        assert residentManager.getResidentList().size() == 3 :  "There should be 3 residents.";
         HashMap<Cca, Resident> expectedMostActiveResident = new HashMap<>();
         expectedMostActiveResident.put(new Cca("Basketball", HIGH), new Resident("John", "1234"));
         expectedMostActiveResident.put(new Cca("Tennis", HIGH), new Resident("Jane", "5678"));
@@ -133,7 +133,7 @@ public class CcaStatsCommandTest {
     @Test
     void mostActiveResidents_noCcas_failure() {
         ArrayList<Cca> ccas = ccaManager.getCCAList();
-        assert ccas.isEmpty();
+        assert ccas.isEmpty() : "There should be no CCAs.";
         boolean caughtException = false;
         try {
             HashMap<Cca, Resident> avgPoints = CcaStatsCommand.mostActiveResidents(ccas);

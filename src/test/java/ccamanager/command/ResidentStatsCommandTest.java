@@ -46,8 +46,8 @@ public class ResidentStatsCommandTest {
         Command addJamesToFootball = parser.parse("add-resident-to-cca 4321 Football 9");
         addJamesToFootball.execute(ccaManager, residentManager, eventManager, ui);
         ArrayList<Resident> residents = residentManager.getResidentList();
-        assert residents.size() == 2;
-        assert ccaManager.getCCAList().size() == 2;
+        assert residents.size() == 2 : "There should be 2 residents.";
+        assert ccaManager.getCCAList().size() == 2 : "There should be 2 CCAs.";
         HashMap<Resident, Integer> expectedTotalPoints = new HashMap<>();
         expectedTotalPoints.put(new Resident("John", "1234"), 9);
         expectedTotalPoints.put(new Resident("James", "4321"), 17);
@@ -57,7 +57,7 @@ public class ResidentStatsCommandTest {
     @Test
     void totalPoints_noResidents_failure() {
         ArrayList<Resident> residents = residentManager.getResidentList();
-        assert residents.isEmpty();
+        assert residents.isEmpty() : "There should be no residents.";
         boolean caughtException = false;
         try {
             HashMap<Resident, Integer> totalPoints = ResidentStatsCommand.totalPoints(residents);
@@ -88,8 +88,8 @@ public class ResidentStatsCommandTest {
         Command addJaneToTennis = parser.parse("add-resident-to-cca 5678 Tennis 8");
         addJaneToTennis.execute(ccaManager, residentManager, eventManager, ui);
         ArrayList<Resident> residents = residentManager.getResidentList();
-        assert residents.size() == 3;
-        assert ccaManager.getCCAList().size() == 3;
+        assert residents.size() == 3 :  "There should be 3 residents.";
+        assert ccaManager.getCCAList().size() == 3 :  "There should be 3 CCAs.";
         HashMap<Resident, Integer> totalPoints = ResidentStatsCommand.totalPoints(residents);
         ArrayList<Resident> expectedMostActiveResidents = new ArrayList<>();
         expectedMostActiveResidents.add(new Resident("John", "1234"));
