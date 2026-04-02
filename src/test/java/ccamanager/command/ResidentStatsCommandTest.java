@@ -49,8 +49,8 @@ public class ResidentStatsCommandTest {
         assert residents.size() == 2 : "There should be 2 residents.";
         assert ccaManager.getCCAList().size() == 2 : "There should be 2 CCAs.";
         HashMap<Resident, Integer> expectedTotalPoints = new HashMap<>();
-        expectedTotalPoints.put(new Resident("James", "4321"), 17);
         expectedTotalPoints.put(new Resident("John", "1234"), 9);
+        expectedTotalPoints.put(new Resident("James", "4321"), 17);
         assertEquals(expectedTotalPoints.toString(), ResidentStatsCommand.totalPoints(residents).toString());
     }
 
@@ -92,8 +92,8 @@ public class ResidentStatsCommandTest {
         assert ccaManager.getCCAList().size() == 3 :  "There should be 3 CCAs.";
         HashMap<Resident, Integer> totalPoints = ResidentStatsCommand.totalPoints(residents);
         ArrayList<Resident> expectedMostActiveResidents = new ArrayList<>();
-        expectedMostActiveResidents.add(new Resident("John", "1234"));
         expectedMostActiveResidents.add(new Resident("James", "4321"));
+        expectedMostActiveResidents.add(new Resident("John", "1234"));
         assertEquals(expectedMostActiveResidents.toString(),
                 ResidentStatsCommand.mostActiveResidents(totalPoints).toString());
     }
