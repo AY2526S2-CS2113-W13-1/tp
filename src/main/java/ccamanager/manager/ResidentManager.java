@@ -71,26 +71,29 @@ public class ResidentManager {
      * @throws ResidentNotFoundException Exception if invalid CCA name is given
      */
     public void deleteResident(String matricNumber) throws ResidentNotFoundException {
+        assert residents != null : "resident list should be initialized";
+        assert matricNumber != null : "matric number should not be null";
+        assert !matricNumber.isBlank() : "matric number should not be blank";
 
-        String residentName = this.nameGivenMatricNumber(matricNumber);
+        Resident resident = this.matchingResident(matricNumber);
+
+
+        if (resident == null) {
+            logger.log(Level.WARNING, "Failed to delete resident. Matric number {0} not found.", matricNumber);
+            throw new ResidentNotFoundException(
+                    "Resident with matric number " + matricNumber + " does not exist."
+            );
+        }
+
+        String residentName = resident.getName();
         logger.log(Level.INFO,"Attempted to delete resident: {0}", residentName);
 
-        assert residents != null : "ccaList should be initialized";
-        assert residentName != null : "CCA name should not be null";
-        assert !residentName.isBlank() : "CCA name should not be blank";
 
-        for (int i = 0; i < residents.size(); i++) {
-            if (residents.get(i).getMatricNumber().equalsIgnoreCase(matricNumber)) {
-                int oldSize = residents.size();
-                residents.remove(i);
-                assert residents.size() == oldSize - 1 : "CCA list size should decrease by 1 after deletion";
+        int oldSize = residents.size();
+        residents.remove(resident);
 
-                logger.log(Level.INFO, "Successfully deleted resident: {0}", residentName);
-                return;
-            }
-        }
-        logger.log(Level.WARNING, "Failed to delete resident: {0}. (Not an exisitng resident).", residentName);
-        throw new ResidentNotFoundException(residentName + " does not exist, please enter a valid CCA name.");
+        assert residents.size() == oldSize - 1 : "resident list size should decrease by 1 after deletion";
+
     }
 
     public Resident findByMatric(String matric) {
