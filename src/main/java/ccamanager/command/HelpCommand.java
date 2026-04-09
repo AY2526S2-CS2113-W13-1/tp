@@ -15,12 +15,15 @@ public class HelpCommand extends Command {
                 "> delete-cca <cca name>\n" +
                 "> add-event <event name>; <cca name>; <data time>\n" +
                 "> add-resident <name>; <matric number>\n" +
+                "> delete-resident <matric number>\n" +
                 "> view-resident\n" +
                 "> add-resident-to-cca <matric number>; <cca name>; <points>\n" +
                 "> add-resident-to-event <matric number>; <event name>; <cca name>\n" +
                 "> view-points\n" +
                 "> cca-stats\n" +
                 "> resident-stats\n" +
+                "> view-cca-events <cca name>\n" +
+                "> view-my-events <matric number>\n" +
                 "> help\n" +
                 "> bye";
         ui.showMessage(help);

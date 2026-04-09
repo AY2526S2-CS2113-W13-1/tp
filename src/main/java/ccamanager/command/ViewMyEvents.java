@@ -22,8 +22,12 @@ public class ViewMyEvents extends Command {
     public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
         ArrayList<Event> ccaEvents = eventManager.viewMyEvents(matricNumber);
         Resident resident = residentManager.matchingResident(matricNumber);
-        System.out.println("Hi "+ resident.getName()+", here are your events: ");
-        ui.viewMyCcas(ccaEvents);
+        if(ccaEvents.isEmpty()){
+            ui.showMessage("There is no event for you!");
+        }else {
+            ui.showMessage("Hi " + resident.getName() + ", here are your events: ");
+            ui.viewMyCcas(ccaEvents);
+        }
     }
 
     @Override
