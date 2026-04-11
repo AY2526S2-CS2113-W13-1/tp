@@ -2,6 +2,7 @@ package ccamanager.command;
 
 import ccamanager.exceptions.CcaNotFoundException;
 import ccamanager.exceptions.DuplicateEventException;
+import ccamanager.exceptions.InvalidEventName;
 import ccamanager.manager.CcaManager;
 import ccamanager.manager.EventManager;
 import ccamanager.manager.ResidentManager;
@@ -40,11 +41,14 @@ public class AddEventCommand extends Command {
                     .filter(x -> x.getName().equalsIgnoreCase(ccaName)) // Added IgnoreCase for robustness
                     .findFirst()
                     .orElseThrow(() -> new CcaNotFoundException(ccaName + " not found."));
+            if(eventName.isBlank()) {
+                throw new InvalidEventName("Please enter a valid event name.");
+            }
 
             eventManager.addEvent(eventName, cca, dateTime);
             ui.showMessage("Event added: " + eventName + " for the CCA " + ccaName + ", during " + dateTime);
 
-        } catch (CcaNotFoundException | DuplicateEventException e) {
+        } catch (CcaNotFoundException | DuplicateEventException | InvalidEventName e) {
             ui.showError(e.getMessage());
         }
     }
