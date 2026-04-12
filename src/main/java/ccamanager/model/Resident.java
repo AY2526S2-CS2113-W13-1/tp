@@ -102,6 +102,16 @@ public class Resident {
         return  totalPoints;
     }
 
+    public void removeCcaByName(String ccaName) {
+        for (int i = ccaRegisteredIn.size() - 1; i >= 0; i--) {
+            if (ccaRegisteredIn.get(i).getName().equalsIgnoreCase(ccaName)) {
+                ccaRegisteredIn.remove(i);
+                points.remove(i);
+            }
+        }
+    }
+
+
     @Override
     public String toString() {
         return name + " | " + matricNumber;

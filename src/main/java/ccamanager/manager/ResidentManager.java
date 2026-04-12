@@ -101,4 +101,10 @@ public class ResidentManager {
                 .filter(r -> r.getMatricNumber().equalsIgnoreCase(matric))
                 .findFirst().orElse(null);
     }
+
+    public void removeCcaFromAllResidents(String ccaName) {
+        for (Resident resident : residents) {
+            resident.removeCcaByName(ccaName);
+        }
+    }
 }
