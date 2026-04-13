@@ -447,22 +447,32 @@ Format: `help`
 Example:
 
 ```
-> help
 _________________________________________________________________________________
- Here is a list of all commands:
-> add-cca <cca name> <level (HIGH, MEDIUM, LOW or UNKNOWN)>
+ --- CCA Manager Help Menu ---
+
+[CCA Management]
+> add-cca <name>; <level (HIGH, MEDIUM, LOW, UNKNOWN)>
+> delete-cca <name>
 > view-cca
-> delete-cca <cca name>
-> add-event <event name> <cca name> <data time>
-> add-resident <name> <matric number>
-> view-resident
-> view-exco <cca name>
-> add-resident-to-cca <matric number> <cca name> <points>
-> add-resident-to-event <matric number> <event name> <cca name>
-> add-exco-to-cca <matric number> <cca name>
-> view-points
+> add-exco-to-cca <matric> ; <cca name>
+> view-exco
 > cca-stats
+
+[Resident Management]
+> add-resident <name>; <matric>
+> delete-resident <matric>
+> view-resident
+> add-resident-to-cca <matric>; <cca name>; <points>
+> view-points
 > resident-stats
+
+[Event Management]
+> add-event <name>; <cca name>; <date time>
+> add-resident-to-event <matric>; <event name>; <cca name>
+> view-cca-events <cca name>
+> view-my-events <matric>
+
+[General]
 > help
 > bye
 _________________________________________________________________________________

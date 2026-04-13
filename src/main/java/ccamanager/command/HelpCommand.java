@@ -16,7 +16,7 @@ public class HelpCommand extends Command {
         sb.append("> add-cca <name>; <level (HIGH, MEDIUM, LOW, UNKNOWN)>\n");
         sb.append("> delete-cca <name>\n");
         sb.append("> view-cca\n");
-        sb.append("> add-exco-to-cca <matric> ; <cca name>h\n");
+        sb.append("> add-exco-to-cca <matric> ; <cca name>\n");
         sb.append("> view-exco\n");
         sb.append("> cca-stats\n\n");
 
