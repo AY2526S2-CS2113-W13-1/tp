@@ -346,6 +346,26 @@ ________________________________________________________________________________
 _________________________________________________________________________________```
 ```
 ---
+### Updating resident CCA points: `update-point`
+
+Updates the points of a resident for a specified CCA.
+
+**Format:**
+
+`update-point MATRIC_NUMBER CCA_NAME POINTS`
+
+**Example:**
+
+`update-point A1 ;floorball; 10`
+
+**Expected output:**
+```
+_________________________________________________________________________________
+Resident yy | A1 points updated to: 10
+_________________________________________________________________________________
+```
+
+---
 
 ## EXCO Commands
 

@@ -523,6 +523,67 @@ Format:
 
 This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
 
+### Update Point Command
+
+#### Overview
+
+The `update-point` command updates the points of a resident for a specified CCA.
+
+Format:  
+`update-point <matric number> <cca name> <points>`
+
+---
+
+#### Implementation
+
+The `update-point` command retrieves the specified resident and CCA, then updates the resident’s points for that CCA.
+
+The `Parser` creates an `UpdateCcaPointCommand` object from user input. `UpdateCcaPointCommand.execute()` retrieves the matching `Resident` from `ResidentManager` and the matching `Cca` from `CcaManager`. It then calls `Resident.updatePoint(cca, point)` to replace the resident’s existing point value for that CCA. After the update is completed, a success message is displayed through the `Ui`.
+
+If the resident or CCA cannot be found, the command catches the corresponding exception and displays an error message.
+
+#### Sequence Diagram
+![update-point.png](images/update-points.png)
+
+---
+
+#### Design Considerations
+
+This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
+
+The update logic is delegated to the `Resident` class through `Resident.updatePoint(...)`, which keeps the point mutation logic encapsulated within the entity that owns the data.
+
+---
+### Sort Points Command
+
+#### Overview
+
+The `sort-points` command sorts residents in descending order of total CCA points and displays the sorted list.
+
+Format:  
+`sort-points`
+
+---
+
+#### Implementation
+
+The `sort-points` command retrieves the resident list from `ResidentManager`, sorts it according to total points, and displays the result.
+
+The `Parser` creates a `SortPointsCommand` object from user input. `SortPointsCommand.execute()` retrieves the list of residents from `ResidentManager` and sorts it in descending order using each resident’s total points. The sorted list is then passed to `Ui.showCcaPoints(...)` for display.
+
+If there are no residents in the system, the command displays an appropriate message instead.
+
+#### Sequence Diagram
+![sort-points.png](images/sort-points.png)
+
+---
+
+#### Design Considerations
+
+This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
+
+The sorting is performed at command level instead of within the `Ui`, so that presentation logic remains separate from business logic.
+
 ## Event Commands
 
 ### Add Event Command
