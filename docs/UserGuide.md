@@ -140,8 +140,8 @@ Example:
 > view-cca-events Basketball
 _________________________________________________________________________________
 Here are the events:
-1. training date: 05/06/2025
-2. finals date: 12/12/2025
+1. training date: 2025-06-05
+2. finals date: 2025-12-12
 _________________________________________________________________________________
 ```
 ---
@@ -168,14 +168,14 @@ ________________________________________________________________________________
 
 Adding an event to any CCA
 
-Format: `add-event <event name>; <cca name>; <date in YYYY-MM-DD>`
+Format: `add-event <event name>; <cca name>; <date (YYYY-MM-DD)>`
 
 Example :
 
 ```
-> add-event Practice-Week1; Dance; 2026-04-13
+> add-event Practice-Week1; Dance; 2026-03-29
 _________________________________________________________________________________
- Event added: Practice-Week1 for the CCA Dance, during 2026-04-13
+ Event added: Practice-Week1 for the CCA Dance, during 2026-03-29
 _________________________________________________________________________________
 ```
 
@@ -489,7 +489,7 @@ ________________________________________________________________________________
 > resident-stats
 
 [Event Management]
-> add-event <name>; <cca name>; <date in YYYY-MM-DD>
+> add-event <name>; <cca name>; <date (YYYY-MM-DD)>
 > add-resident-to-event <unique identifier>; <event name>; <cca name>
 > view-cca-events <cca name>
 > view-my-events <unique identifier>
@@ -519,7 +519,7 @@ ________________________________________________________________________________
 > view-points
 > resident-stats
 
-> add-event <name>; <cca name>; <date in YYYY-MM-DD>
+> add-event <name>; <cca name>; <date (YYYY-MM-DD)>
 > add-resident-to-event <unique identifier>; <event name>; <cca name>
 > view-cca-events <cca name>
 > view-my-events <unique identifier>
