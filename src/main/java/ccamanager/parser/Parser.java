@@ -6,6 +6,7 @@ import ccamanager.enumerations.CcaLevel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  * Parser — reads raw user input and returns the appropriate Command object.
  **/
@@ -77,7 +78,7 @@ public class Parser {
             if (args.length < 1 || args[0].isBlank()){
                 return new UnknownCommand("Usage: view-exco <cca-name>");
             }
-            return new ViewCcaExco(args[0]);
+            return new ViewCcaExcoCommand(args[0]);
 
         case "delete-cca":
             if (args.length < 1 || args[0].isBlank()) {
@@ -155,13 +156,13 @@ public class Parser {
             if (args[0].isBlank()) {
                 return new UnknownCommand("CCA name cannot be empty.");
             }
-            return new ViewCcaEvents(args[0]);
+            return new ViewCcaEventsCommand(args[0]);
 
         case "view-my-event":
             if (args[0].isBlank()) {
                 return new UnknownCommand("Resident name cannot be empty.");
             }
-            return new ViewMyEvents(args[0]);
+            return new ViewMyEventsCommand(args[0]);
 
         case "view-residents-in-cca":
             if(args[0].isBlank()){

@@ -3,14 +3,11 @@ package ccamanager.model;
 import java.util.ArrayList;
 
 import ccamanager.exceptions.EventNotFoundException;
-import ccamanager.exceptions.ResidentAlreadyInCcaException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ccamanager.enumerations.CcaLevel;
 import ccamanager.exceptions.ResidentAlreadyInEventException;
-import ccamanager.exceptions.ResidentAlreadyInExcoException;
 
 public class Event {
     private static final Logger logger = Logger.getLogger(Event.class.getName());

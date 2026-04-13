@@ -42,7 +42,8 @@ public class AddResidentToCcaCommand extends Command {
 
         } catch (NumberFormatException e) {
             // 4. Catch non-number inputs (like "abc" or "10.5")
-            throw new IllegalArgumentException("Points must be a valid whole number. You entered: '" + pointsScored + "'");
+            throw new IllegalArgumentException("Points must be a valid whole number. You entered: '"
+                    + pointsScored + "'");
         }
     }
 

@@ -61,7 +61,8 @@ public class AddResidentToEventCommand extends Command {
             ui.showMessage("Successfully added " + resident.getName() + " to event " +
                     eventName + " under CCA " + ccaName + ".");
 
-        } catch (ResidentNotFoundException | CcaNotFoundException | EventNotFoundException | ResidentAlreadyInEventException e) {
+        } catch (ResidentNotFoundException | CcaNotFoundException | EventNotFoundException
+                 | ResidentAlreadyInEventException e) {
             ui.showError(e.getMessage());
         }
     }

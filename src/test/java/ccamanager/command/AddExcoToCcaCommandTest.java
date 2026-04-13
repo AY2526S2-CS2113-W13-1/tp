@@ -26,7 +26,8 @@ public class AddExcoToCcaCommandTest {
 
     @Test
     void executeAddExcoToCcasuccess(){
-        new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
+        new AddCcaCommand("Basketball", CcaLevel.HIGH)
+                .execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John", "A1234567B")
                 .execute(ccaManager, residentManager, eventManager, ui);
         new AddExcoToCcaCommand("A1234567B", "Basketball")
@@ -37,7 +38,8 @@ public class AddExcoToCcaCommandTest {
 
     @Test
     void executeAddExcoToCcaCommandccaNotFound(){
-        new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
+        new AddCcaCommand("Basketball", CcaLevel.HIGH)
+                .execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John", "A1234567B")
                 .execute(ccaManager, residentManager, eventManager, ui);
         new AddExcoToCcaCommand("A1234568B", "Football")
@@ -47,7 +49,8 @@ public class AddExcoToCcaCommandTest {
 
     @Test
     void executeAddExcoToCcaresidentNotFound(){
-        new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
+        new AddCcaCommand("Basketball", CcaLevel.HIGH).
+                execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John", "A1234567B")
                 .execute(ccaManager, residentManager, eventManager, ui);
         new AddExcoToCcaCommand("A1234568A", "Basketball")
@@ -57,7 +60,8 @@ public class AddExcoToCcaCommandTest {
 
     @Test
     void executeAddExcoToCcaResidentAlreadyInExco(){
-        new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
+        new AddCcaCommand("Basketball", CcaLevel.HIGH)
+                .execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John", "A1234567B")
                 .execute(ccaManager, residentManager, eventManager, ui);
         new AddExcoToCcaCommand("A1234567B", "Basketball")

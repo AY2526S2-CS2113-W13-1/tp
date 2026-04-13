@@ -48,10 +48,18 @@ public class AddExcoToCcaCommand extends Command {
                     .findFirst()
                     .orElseThrow(() -> new ResidentNotFoundException(matriculationNo + " not found."));
 
-            boolean alreadyIn = !cca.getRegisteredResidents().stream().filter(r -> r.getMatricNumber().equalsIgnoreCase(resident.getMatricNumber())).toList().isEmpty();
+            boolean alreadyIn = !cca.getRegisteredResidents()
+                    .stream()
+                    .filter(r -> r.getMatricNumber().equalsIgnoreCase(resident.getMatricNumber()))
+                    .toList()
+                    .isEmpty();
 
             if(alreadyIn){
-                cca.addExcoToCca(cca.getRegisteredResidents().stream().filter(r -> r.getMatricNumber().equalsIgnoreCase(resident.getMatricNumber())).toList().get(0));
+                cca.addExcoToCca(cca.getRegisteredResidents()
+                        .stream()
+                        .filter(r -> r.getMatricNumber().equalsIgnoreCase(resident.getMatricNumber()))
+                        .toList()
+                        .get(0));
             }else {
                 cca.addExcoToCca(resident);
                 resident.addCcaToResident(cca);

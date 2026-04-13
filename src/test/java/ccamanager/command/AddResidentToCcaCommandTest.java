@@ -30,9 +30,12 @@ public class AddResidentToCcaCommandTest {
 
     @Test
     void execute_addResidentToCca_success() {
-        new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
-        new AddResidentCommand("John", "A1234567B").execute(ccaManager, residentManager, eventManager, ui);
-        assertDoesNotThrow(() -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+        new AddCcaCommand("Basketball", CcaLevel.HIGH)
+                .execute(ccaManager, residentManager, eventManager, ui);
+        new AddResidentCommand("John", "A1234567B")
+                .execute(ccaManager, residentManager, eventManager, ui);
+        assertDoesNotThrow(()
+                -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
                 .execute(ccaManager, residentManager, eventManager, ui));
         assertEquals("Resident John | A1234567B was added to CCA: Basketball with 10 points.",
                 ui.getLastMessage());
@@ -40,24 +43,30 @@ public class AddResidentToCcaCommandTest {
 
     @Test
     void execute_addResidentToCca_ccaNotFound() {
-        new AddResidentCommand("John", "A1234567B").execute(ccaManager, residentManager, eventManager, ui);
-        assertDoesNotThrow(() -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+        new AddResidentCommand("John", "A1234567B")
+                .execute(ccaManager, residentManager, eventManager, ui);
+        assertDoesNotThrow(()
+                -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
                 .execute(ccaManager, residentManager, eventManager, ui));
         assertEquals("Basketball not found.", ui.getLastMessage());
     }
 
     @Test
     void execute_addResidentToCca_residentNotFound() {
-        new AddCcaCommand("Basketball", CcaLevel.MEDIUM).execute(ccaManager, residentManager, eventManager, ui);
-        assertDoesNotThrow(() -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+        new AddCcaCommand("Basketball", CcaLevel.MEDIUM)
+                .execute(ccaManager, residentManager, eventManager, ui);
+        assertDoesNotThrow(()
+                -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
                 .execute(ccaManager, residentManager, eventManager, ui));
         assertEquals("A1234567B not found.", ui.getLastMessage());
     }
 
     @Test
     void execute_addResidentToCca_alreadyInCca() {
-        new AddCcaCommand("Basketball", CcaLevel.LOW).execute(ccaManager, residentManager, eventManager, ui);
-        new AddResidentCommand("John", "A1234567B").execute(ccaManager, residentManager, eventManager, ui);
+        new AddCcaCommand("Basketball", CcaLevel.LOW)
+                .execute(ccaManager, residentManager, eventManager, ui);
+        new AddResidentCommand("John", "A1234567B")
+                .execute(ccaManager, residentManager, eventManager, ui);
         assertDoesNotThrow(() -> {
             new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
                     .execute(ccaManager, residentManager, eventManager, ui);

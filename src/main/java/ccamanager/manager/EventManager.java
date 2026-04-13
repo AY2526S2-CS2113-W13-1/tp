@@ -1,7 +1,6 @@
 package ccamanager.manager;
 
 import ccamanager.exceptions.DuplicateEventException;
-import ccamanager.exceptions.EventNotFoundException;
 import ccamanager.model.Cca;
 import ccamanager.model.Event;
 import ccamanager.model.Resident;

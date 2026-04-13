@@ -175,7 +175,8 @@ public class StorageManager {
      */
     public void load(CcaManager ccaManager,
                      ResidentManager residentManager,
-                     EventManager eventManager) throws IOException, EventNotFoundException, ResidentAlreadyInEventException {
+                     EventManager eventManager) throws IOException, EventNotFoundException,
+            ResidentAlreadyInEventException {
         ensureDataDir();
         loadCcas(ccaManager);
         loadResidents(residentManager);
@@ -408,7 +409,8 @@ public class StorageManager {
             try {
                 event.addResidentToEvent(resident);
             } catch (ResidentAlreadyInEventException e) {
-                LOGGER.log(Level.WARNING, "event_attendance.txt line {0}: could not add event_attendance — skipping: {1}",
+                LOGGER.log(Level.WARNING,
+                        "event_attendance.txt line {0}: could not add event_attendance — skipping: {1}",
                         new Object[]{lineNum, e.getMessage()});
             }
         }
