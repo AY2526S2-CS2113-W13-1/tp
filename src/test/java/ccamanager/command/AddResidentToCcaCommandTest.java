@@ -1,6 +1,7 @@
 package ccamanager.command;
 
 import ccamanager.enumerations.CcaLevel;
+import ccamanager.exceptions.InvalidPointsException;
 import ccamanager.manager.CcaManager;
 import ccamanager.manager.ResidentManager;
 import ccamanager.manager.EventManager;
@@ -8,7 +9,9 @@ import ccamanager.ui.Ui;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AddResidentToCcaCommandTest {
 
@@ -29,8 +32,8 @@ public class AddResidentToCcaCommandTest {
     void execute_addResidentToCca_success() {
         new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John", "A1234567B").execute(ccaManager, residentManager, eventManager, ui);
-        new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
-                .execute(ccaManager, residentManager, eventManager, ui);
+        assertDoesNotThrow(() -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+                .execute(ccaManager, residentManager, eventManager, ui));
         assertEquals("Resident John | A1234567B was added to CCA: Basketball with 10 points.",
                 ui.getLastMessage());
     }
@@ -38,16 +41,16 @@ public class AddResidentToCcaCommandTest {
     @Test
     void execute_addResidentToCca_ccaNotFound() {
         new AddResidentCommand("John", "A1234567B").execute(ccaManager, residentManager, eventManager, ui);
-        new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
-                .execute(ccaManager, residentManager, eventManager, ui);
+        assertDoesNotThrow(() -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+                .execute(ccaManager, residentManager, eventManager, ui));
         assertEquals("Basketball not found.", ui.getLastMessage());
     }
 
     @Test
     void execute_addResidentToCca_residentNotFound() {
         new AddCcaCommand("Basketball", CcaLevel.MEDIUM).execute(ccaManager, residentManager, eventManager, ui);
-        new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
-                .execute(ccaManager, residentManager, eventManager, ui);
+        assertDoesNotThrow(() -> new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+                .execute(ccaManager, residentManager, eventManager, ui));
         assertEquals("A1234567B not found.", ui.getLastMessage());
     }
 
@@ -55,10 +58,29 @@ public class AddResidentToCcaCommandTest {
     void execute_addResidentToCca_alreadyInCca() {
         new AddCcaCommand("Basketball", CcaLevel.LOW).execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John", "A1234567B").execute(ccaManager, residentManager, eventManager, ui);
-        new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
-                .execute(ccaManager, residentManager, eventManager, ui);
-        new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
-                .execute(ccaManager, residentManager, eventManager, ui);
+        assertDoesNotThrow(() -> {
+            new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+                    .execute(ccaManager, residentManager, eventManager, ui);
+            new AddResidentToCcaCommand("A1234567B", "Basketball", "10")
+                    .execute(ccaManager, residentManager, eventManager, ui);
+        });
         assertEquals("Resident John is already a member of Basketball.", ui.getLastMessage());
+    }
+
+    @Test
+    void constructor_negativePoints_throwsInvalidPointsException() {
+        assertThrows(InvalidPointsException.class,
+                () -> new AddResidentToCcaCommand("A1234567B", "Basketball", "-5"));
+    }
+
+    @Test
+    void constructor_nonIntegerPoints_throwsInvalidPointsException() {
+        assertThrows(InvalidPointsException.class,
+                () -> new AddResidentToCcaCommand("A1234567B", "Basketball", "abc"));
+    }
+
+    @Test
+    void constructor_zeroPoints_success() {
+        assertDoesNotThrow(() -> new AddResidentToCcaCommand("A1234567B", "Basketball", "0"));
     }
 }

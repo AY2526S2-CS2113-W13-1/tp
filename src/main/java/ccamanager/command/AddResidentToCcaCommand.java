@@ -10,6 +10,7 @@ import ccamanager.model.Resident;
 import ccamanager.ui.Ui;
 
 import ccamanager.exceptions.CcaNotFoundException;
+import ccamanager.exceptions.InvalidPointsException;
 import ccamanager.exceptions.ResidentNotFoundException;
 import ccamanager.exceptions.ResidentAlreadyInCcaException;
 
@@ -20,14 +21,25 @@ public class AddResidentToCcaCommand extends Command {
     private final String ccaName;
     private final int pointsScored;
 
-    public AddResidentToCcaCommand(String matriculationNo, String ccaName, String pointsScored) {
+    public AddResidentToCcaCommand(String matriculationNo, String ccaName, String pointsScored)
+            throws InvalidPointsException {
         assert matriculationNo != null : "Matriculation number should not be null";
         assert ccaName != null : "CCA name should not be null";
         assert pointsScored != null : "Points scored should not be null";
-        assert Integer.parseInt(pointsScored) >= 0 : "Points scored must be greater than or equal to 0";
+        //assert Integer.parseInt(pointsScored) >= 0 : "Points scored must be greater than or equal to 0";
+
+        int parsedPoints;
+        try {
+            parsedPoints = Integer.parseInt(pointsScored);
+            if (parsedPoints < 0) {
+                throw new InvalidPointsException("Points scored must be non-negative, got: " + parsedPoints + ".");
+            }
+        } catch (NumberFormatException e) {
+            throw new InvalidPointsException("Points scored must be a valid integer, got: \"" + pointsScored + "\".");
+        }
         this.matriculationNo = matriculationNo;
         this.ccaName = ccaName;
-        this.pointsScored = Integer.parseInt(pointsScored);
+        this.pointsScored = parsedPoints;
     }
 
     @Override
@@ -54,6 +66,3 @@ public class AddResidentToCcaCommand extends Command {
         }
     }
 }
-
-
-

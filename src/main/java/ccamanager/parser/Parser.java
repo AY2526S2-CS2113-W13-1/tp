@@ -24,6 +24,8 @@ import ccamanager.command.SortPointsCommand;
 import ccamanager.command.UpdateCcaPointCommand;
 import ccamanager.enumerations.CcaLevel;
 
+import ccamanager.exceptions.InvalidPointsException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -158,7 +160,11 @@ public class Parser {
             if (args[2].isBlank()) {
                 return new UnknownCommand("Points cannot be empty.");
             }
-            return new AddResidentToCcaCommand(args[0], args[1], args[2]);
+            try {
+                return new AddResidentToCcaCommand(args[0], args[1], args[2]);
+            } catch (InvalidPointsException e) {
+                return new UnknownCommand(e.getMessage());
+            }
 
         case "add-exco-to-cca":
             if (args.length < 2) {
