@@ -40,7 +40,7 @@ public class AddExcoToCcaCommand extends Command {
     public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
         try {
             Cca cca = ccaManager.getCCAList().stream()
-                    .filter(x -> x.getName().equals(ccaName))
+                    .filter(x -> x.getName().equalsIgnoreCase(ccaName))
                     .findFirst()
                     .orElseThrow(() -> new CcaNotFoundException(ccaName + " not found."));
 
