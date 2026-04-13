@@ -1,7 +1,6 @@
 package ccamanager.command;
 
 import ccamanager.enumerations.CcaLevel;
-import ccamanager.exceptions.InvalidPointsException;
 import ccamanager.manager.CcaManager;
 import ccamanager.manager.ResidentManager;
 import ccamanager.manager.EventManager;
