@@ -1,6 +1,7 @@
 package ccamanager.command;
 
-import ccamanager.exceptions.*;
+import ccamanager.exceptions.CcaNotFoundException;
+import ccamanager.exceptions.ResidentNotFoundException;
 import ccamanager.manager.CcaManager;
 import ccamanager.manager.EventManager;
 import ccamanager.manager.ResidentManager;
