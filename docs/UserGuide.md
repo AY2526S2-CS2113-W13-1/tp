@@ -128,20 +128,20 @@ ________________________________________________________________________________
 
 ---
 
-### Viewing Events for a CCA: `view-cca-event`
+### Viewing Events for a CCA: `view-cca-events`
 
 View all events belonging to a specific CCA.
 
-Format: view-cca-event <cca name>
+Format: view-cca-events <cca name>
 
 Example:
 
 ```
-> view-cca-event Basketball
+> view-cca-events Basketball
 _________________________________________________________________________________
-Here are the events under Basketball:
-1. Practice-Week1 | 29/3/26
-2. Friendly-Match | 5/4/26
+Here are the events:
+1. training date: 05/06/2025
+2. finals date: 12/12/2025
 _________________________________________________________________________________
 ```
 ---
@@ -215,16 +215,16 @@ ________________________________________________________________________________
 
 ---
 
-### Viewing My Events: `view-my-event`
+### Viewing My Events: `view-my-events`
 
 View all events that a resident is participating in.
 
-Format: view-my-event <matric number>
+Format: view-my-events <matric number>
 
 Example:
 
 ```
-> view-my-event A1234567B
+> view-my-events A1234567B
 Hi John, here are your events:
 _________________________________________________________________________________
 1. Practice-Week1 | Basketball | 29/3/26
@@ -488,9 +488,9 @@ view-cca
 delete-cca <cca name>
 
 add-event <event name>; <cca name>; <date>
-view-cca-event <cca name>
+view-cca-events <cca name>
 add-resident-to-event <matric number>; <event name>; <cca name>
-view-my-event <matric number>
+view-my-events <matric number>
 
 add-resident <name>; <matric number>
 view-resident
