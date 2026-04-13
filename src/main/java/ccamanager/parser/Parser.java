@@ -161,7 +161,7 @@ public class Parser {
             return new AddResidentToCcaCommand(args[0], args[1], args[2]);
 
         case "add-exco-to-cca":
-            if (args.length < 2) {
+            if (args.length < 3) {
                 return new UnknownCommand("Usage: add-exco-to-cca <matric number>; <cca name>");
             }
             if (args[0].isBlank()) {
