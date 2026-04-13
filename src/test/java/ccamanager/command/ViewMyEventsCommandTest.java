@@ -1,6 +1,7 @@
 package ccamanager.command;
 
 import ccamanager.enumerations.CcaLevel;
+import ccamanager.exceptions.InvalidPointsException;
 import ccamanager.manager.CcaManager;
 import ccamanager.manager.EventManager;
 import ccamanager.manager.ResidentManager;
@@ -69,7 +70,7 @@ public class ViewMyEventsCommandTest {
     }
 
     @Test
-    void execute_viewMyEvents_oneMatchingEvent() {
+    void execute_viewMyEvents_oneMatchingEvent() throws InvalidPointsException {
         // Setup
         new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John Doe", "A1234567X")
@@ -99,7 +100,7 @@ public class ViewMyEventsCommandTest {
     }
 
     @Test
-    void execute_viewMyEvents_multipleMatchingEvents() {
+    void execute_viewMyEvents_multipleMatchingEvents() throws InvalidPointsException {
         // Setup
         new AddCcaCommand("Basketball", CcaLevel.HIGH).execute(ccaManager, residentManager, eventManager, ui);
         new AddResidentCommand("John Doe", "A1234567X")

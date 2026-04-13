@@ -15,9 +15,9 @@ import ccamanager.command.HelpCommand;
 import ccamanager.command.ResidentStatsCommand;
 import ccamanager.command.UnknownCommand;
 import ccamanager.command.ViewCcaCommand;
-import ccamanager.command.ViewCcaEvents;
-import ccamanager.command.ViewCcaExco;
-import ccamanager.command.ViewMyEvents;
+import ccamanager.command.ViewCcaEventsCommand;
+import ccamanager.command.ViewCcaExcoCommand;
+import ccamanager.command.ViewMyEventsCommand;
 import ccamanager.command.ViewPointsCommand;
 import ccamanager.command.ViewResidentCommand;
 import ccamanager.command.SortPointsCommand;
@@ -100,7 +100,7 @@ public class Parser {
             if (args.length < 1 || args[0].isBlank()){
                 return new UnknownCommand("Usage: view-exco <cca-name>");
             }
-            return new ViewCcaExco(args[0]);
+            return new ViewCcaExcoCommand(args[0]);
 
         case "delete-cca":
             if (args.length < 1 || args[0].isBlank()) {
@@ -179,19 +179,19 @@ public class Parser {
             if (args[2].isBlank()) {
                 return new UnknownCommand("Points cannot be empty.");
             }
-            return new AddExcoToCcaCommand(args[0], args[1],args[2]);
+            return new AddExcoToCcaCommand(args[0], args[1]);
 
         case "view-cca-events":
             if (args[0].isBlank()) {
                 return new UnknownCommand("CCA name cannot be empty.");
             }
-            return new ViewCcaEvents(args[0]);
+            return new ViewCcaEventsCommand(args[0]);
 
         case "view-my-events":
             if (args[0].isBlank()) {
                 return new UnknownCommand("Resident matric number cannot be empty.");
             }
-            return new ViewMyEvents(args[0]);
+            return new ViewMyEventsCommand(args[0]);
         case "update-point":
             if (args.length < 3) {
                 return new UnknownCommand("Usage: add-resident-to-event <matric>; <event>; <cca>");

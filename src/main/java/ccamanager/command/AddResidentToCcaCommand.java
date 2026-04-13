@@ -1,5 +1,6 @@
 package ccamanager.command;
 
+import ccamanager.exceptions.InvalidPointsException;
 import ccamanager.manager.CcaManager;
 import ccamanager.manager.EventManager;
 import ccamanager.manager.ResidentManager;
@@ -21,7 +22,7 @@ public class AddResidentToCcaCommand extends Command {
     private final int pointsScored;
 
     public AddResidentToCcaCommand(String matriculationNo, String ccaName, String pointsScored)
-            throws IllegalArgumentException { // Declare that this can fail
+            throws IllegalArgumentException, InvalidPointsException { // Declare that this can fail
 
         // 1. Basic null checks (using standard if-statements, not asserts)
         if (matriculationNo == null || ccaName == null || pointsScored == null) {
