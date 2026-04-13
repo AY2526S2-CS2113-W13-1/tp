@@ -20,14 +20,30 @@ public class AddResidentToCcaCommand extends Command {
     private final String ccaName;
     private final int pointsScored;
 
-    public AddResidentToCcaCommand(String matriculationNo, String ccaName, String pointsScored) {
-        assert matriculationNo != null : "Matriculation number should not be null";
-        assert ccaName != null : "CCA name should not be null";
-        assert pointsScored != null : "Points scored should not be null";
-        assert Integer.parseInt(pointsScored) >= 0 : "Points scored must be greater than or equal to 0";
+    public AddResidentToCcaCommand(String matriculationNo, String ccaName, String pointsScored)
+            throws IllegalArgumentException { // Declare that this can fail
+
+        // 1. Basic null checks (using standard if-statements, not asserts)
+        if (matriculationNo == null || ccaName == null || pointsScored == null) {
+            throw new IllegalArgumentException("Arguments cannot be null.");
+        }
+
         this.matriculationNo = matriculationNo;
         this.ccaName = ccaName;
-        this.pointsScored = Integer.parseInt(pointsScored);
+
+        // 2. Parse and validate the integer
+        try {
+            this.pointsScored = Integer.parseInt(pointsScored.trim()); // .trim() removes accidental spaces
+
+            // 3. Catch negative numbers!
+            if (this.pointsScored < 0) {
+                throw new IllegalArgumentException("Points scored must be 0 or greater.");
+            }
+
+        } catch (NumberFormatException e) {
+            // 4. Catch non-number inputs (like "abc" or "10.5")
+            throw new IllegalArgumentException("Points must be a valid whole number. You entered: '" + pointsScored + "'");
+        }
     }
 
     @Override

@@ -39,17 +39,23 @@ public class AddExcoToCcaCommand extends Command {
     public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
         try {
             Cca cca = ccaManager.getCCAList().stream()
-                    .filter(x -> x.getName().equals(ccaName))
+                    .filter(x -> x.getName().equalsIgnoreCase(ccaName))
                     .findFirst()
                     .orElseThrow(() -> new CcaNotFoundException(ccaName + " not found."));
 
             Resident resident = residentManager.getResidentList().stream()
-                    .filter(x -> x.getMatricNumber().equals(matriculationNo))
+                    .filter(x -> x.getMatricNumber().equalsIgnoreCase(matriculationNo))
                     .findFirst()
                     .orElseThrow(() -> new ResidentNotFoundException(matriculationNo + " not found."));
 
-            cca.addExcoToCca(resident);
-            resident.addCcaToResident(cca);
+            boolean alreadyIn = !cca.getRegisteredResidents().stream().filter(r -> r.getMatricNumber().equalsIgnoreCase(resident.getMatricNumber())).toList().isEmpty();
+
+            if(alreadyIn){
+                cca.addExcoToCca(cca.getRegisteredResidents().stream().filter(r -> r.getMatricNumber().equalsIgnoreCase(resident.getMatricNumber())).toList().get(0));
+            }else {
+                cca.addExcoToCca(resident);
+                resident.addCcaToResident(cca);
+            }
 
             ui.showMessage("Resident " + resident + " was added as an EXCO to CCA: " + cca.getName());
 
