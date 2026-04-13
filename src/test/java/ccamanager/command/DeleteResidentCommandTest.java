@@ -44,7 +44,7 @@ public class DeleteResidentCommandTest {
         command.execute(ccaManager, residentManager, eventManager, ui);
 
         assertEquals(0, residentManager.getResidentList().size());
-        assertEquals("Resident with A1234567X does not exist", ui.getLastMessage());
+        assertEquals("Resident with matric number A1234567X does not exist", ui.getLastMessage());
 
     }
 
@@ -56,6 +56,6 @@ public class DeleteResidentCommandTest {
         command.execute(ccaManager, residentManager, eventManager, ui);
 
         assertEquals(1, residentManager.getResidentList().size());
-        assertEquals("Resident with A7654321Y does not exist", ui.getLastMessage());
+        assertEquals("Resident with matric number A7654321Y does not exist", ui.getLastMessage());
     }
 }

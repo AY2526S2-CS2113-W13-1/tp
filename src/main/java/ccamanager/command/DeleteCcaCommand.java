@@ -21,6 +21,8 @@ public class DeleteCcaCommand extends Command{
     public void execute(CcaManager ccaManager, ResidentManager residentManager, EventManager eventManager, Ui ui) {
         try {
             ccaManager.deleteCca(ccaName);
+            residentManager.removeCcaFromAllResidents(ccaName);
+            eventManager.removeEventsByCca(ccaName);
             ui.showMessage("CCA deleted: " + ccaName);
         } catch (CcaNotFoundException e) {
             ui.showMessage(e.getMessage());

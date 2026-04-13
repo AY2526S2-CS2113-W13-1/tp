@@ -25,7 +25,7 @@ public class DeleteResidentCommand extends Command {
         try {
             Resident resident = residentManager.matchingResident(matricNumber);
             if(resident==null) {
-                ui.showError("Resident with " + matricNumber + " does not exist");
+                ui.showError("Resident with matric number " + matricNumber + " does not exist" );
                 return;
             }
             String residentName = resident.getName();

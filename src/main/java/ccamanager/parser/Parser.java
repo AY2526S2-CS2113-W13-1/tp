@@ -21,6 +21,7 @@ import ccamanager.command.ViewMyEvents;
 import ccamanager.command.ViewPointsCommand;
 import ccamanager.command.ViewResidentCommand;
 import ccamanager.enumerations.CcaLevel;
+import ccamanager.command.SortPointsCommand;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,6 +66,8 @@ public class Parser {
                 return new CcaStatsCommand();
             case "resident-stats":
                 return new ResidentStatsCommand();
+            case "sort-points":
+                return new SortPointsCommand();
             default:
                 return new UnknownCommand();
             }

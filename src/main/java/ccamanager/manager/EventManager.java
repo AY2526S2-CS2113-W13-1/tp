@@ -95,5 +95,9 @@ public class EventManager {
                         && e.getCca().getName().equalsIgnoreCase(ccaName))
                 .findFirst().orElse(null);
     }
+    
+    public void removeEventsByCca(String ccaName) {
+        events.removeIf(event -> event.getCca().getName().equalsIgnoreCase(ccaName));
+    }
 }
 
