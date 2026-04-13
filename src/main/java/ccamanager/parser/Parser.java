@@ -15,19 +15,19 @@ import ccamanager.command.HelpCommand;
 import ccamanager.command.ResidentStatsCommand;
 import ccamanager.command.UnknownCommand;
 import ccamanager.command.ViewCcaCommand;
-import ccamanager.command.ViewCcaEventsCommand;
-import ccamanager.command.ViewCcaExcoCommand;
-import ccamanager.command.ViewMyEventsCommand;
+import ccamanager.command.ViewCcaEvents;
+import ccamanager.command.ViewCcaExco;
+import ccamanager.command.ViewMyEvents;
 import ccamanager.command.ViewPointsCommand;
 import ccamanager.command.ViewResidentCommand;
 import ccamanager.command.SortPointsCommand;
 import ccamanager.command.UpdateCcaPointCommand;
 import ccamanager.enumerations.CcaLevel;
-import ccamanager.command.ViewResidentInCcaCommand;
+
+import ccamanager.exceptions.InvalidPointsException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  * Parser — reads raw user input and returns the appropriate Command object.
@@ -100,7 +100,7 @@ public class Parser {
             if (args.length < 1 || args[0].isBlank()){
                 return new UnknownCommand("Usage: view-exco <cca-name>");
             }
-            return new ViewCcaExcoCommand(args[0]);
+            return new ViewCcaExco(args[0]);
 
         case "delete-cca":
             if (args.length < 1 || args[0].isBlank()) {
@@ -160,10 +160,14 @@ public class Parser {
             if (args[2].isBlank()) {
                 return new UnknownCommand("Points cannot be empty.");
             }
-            return new AddResidentToCcaCommand(args[0], args[1], args[2]);
+            try {
+                return new AddResidentToCcaCommand(args[0], args[1], args[2]);
+            } catch (InvalidPointsException e) {
+                return new UnknownCommand(e.getMessage());
+            }
 
         case "add-exco-to-cca":
-            if (args.length < 2) {
+            if (args.length < 3) {
                 return new UnknownCommand("Usage: add-exco-to-cca <matric number>; <cca name>");
             }
             if (args[0].isBlank()) {
@@ -172,26 +176,22 @@ public class Parser {
             if (args[1].isBlank()) {
                 return new UnknownCommand("CCA name cannot be empty.");
             }
-            return new AddExcoToCcaCommand(args[0], args[1]);
+            if (args[2].isBlank()) {
+                return new UnknownCommand("Points cannot be empty.");
+            }
+            return new AddExcoToCcaCommand(args[0], args[1],args[2]);
 
-        case "view-cca-event":
+        case "view-cca-events":
             if (args[0].isBlank()) {
                 return new UnknownCommand("CCA name cannot be empty.");
             }
-            return new ViewCcaEventsCommand(args[0]);
+            return new ViewCcaEvents(args[0]);
 
-        case "view-my-event":
+        case "view-my-events":
             if (args[0].isBlank()) {
-                return new UnknownCommand("Resident name cannot be empty.");
+                return new UnknownCommand("Resident matric number cannot be empty.");
             }
-            return new ViewMyEventsCommand(args[0]);
-
-        case "view-residents-in-cca":
-            if(args[0].isBlank()){
-                return new UnknownCommand("Cca name cannot be blank");
-            }
-            return new ViewResidentInCcaCommand(args[0]);
-
+            return new ViewMyEvents(args[0]);
         case "update-point":
             if (args.length < 3) {
                 return new UnknownCommand("Usage: add-resident-to-event <matric>; <event>; <cca>");
@@ -206,7 +206,6 @@ public class Parser {
                 return new UnknownCommand("Point cannot be empty.");
             }
             return new UpdateCcaPointCommand(args[0],args[1],args[2]);
-
         default:
             // This captures cases like "help" (if not caught above) or completely unknown words
             return parseSingleWordFallback(commandWord);
