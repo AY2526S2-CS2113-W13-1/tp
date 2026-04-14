@@ -1,0 +1,56 @@
+@startuml view-resident-in-cca
+
+skinparam defaultFontSize 13
+skinparam SequenceArrowThickness 1.5
+skinparam SequenceParticipantBackgroundColor #f9f9f9
+
+title view-resident-in-cca Command
+
+actor ":User" as User
+participant "ccaLedger : CcaLedger" as CcaLedger
+participant "ui : Ui" as Ui
+participant "parser : Parser" as Parser
+participant "command : ViewResidentInCcaCommand" as Command
+participant "ccaManager : CcaManager" as CcaManager
+participant "cca : Cca" as Cca
+
+ref over User, CcaLedger, Ui, Parser, Command
+  SD_CommandExecution
+end ref
+
+Command -> CcaManager : findByName(ccaName)
+activate CcaManager
+CcaManager --> Command : cca
+deactivate CcaManager
+
+alt cca == null
+    Command -> Ui : showError("CCA '" + ccaName + "' does not exist.")
+    activate Ui
+    Ui --> Command
+    deactivate Ui
+else cca != null
+    Command -> Cca : getResidents()
+    activate Cca
+    Cca --> Command : members : ArrayList<Resident>
+    deactivate Cca
+
+    Command -> Cca : getExcos()
+    activate Cca
+    Cca --> Command : excos : ArrayList<Resident>
+    deactivate Cca
+
+    Command -> Cca : getName()
+    activate Cca
+    Cca --> Command : name : String
+    deactivate Cca
+
+    Command -> Ui : showResidentsInCca(name, members, excos)
+    activate Ui
+    Ui --> Command
+    deactivate Ui
+end
+
+Command --> CcaLedger
+deactivate Command
+
+@enduml

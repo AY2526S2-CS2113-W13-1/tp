@@ -275,6 +275,25 @@ ________________________________________________________________________________
 
 ---
 
+### Viewing residents: `view-resident-in-cca`
+
+Displays all the residents in registered in a cca.
+
+Format: `view-resident-in-cca <cca name>`
+
+Example:
+
+`> view-resident-in-cca Basketball`
+
+```
+_________________________________________________________________________________
+Here is the list of residents in Basketball:
+1. [EXCO] Aarav (A0310652R)
+_________________________________________________________________________________
+```
+
+---
+
 ### Deleting Resident: `delete-resident`
 
 Delete an existing resident from the system.

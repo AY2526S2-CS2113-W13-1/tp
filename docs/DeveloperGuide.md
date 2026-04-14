@@ -15,6 +15,7 @@
 3. [Resident Commands](#resident-commands)
    - [Add Resident Command](#add-resident-command)
    - [View Resident Command](#view-resident-command)
+   - [View Resident in a CCA Command](#view-resident-in-cca-command)
    - [Delete Resident Command](#delete-resident-command)
    - [Add Resident to CCA Command](#add-resident-to-cca-command)
    - [View Points Command](#view-points-command)
@@ -402,6 +403,38 @@ The `view-resident` command retrieves and displays all residents.
 #### Sequence Diagram
 ![Add View Resident Sequence Diagram](images/view-resident-new.png)
 
+#### Design Consideration
+
+
+---
+
+### View Resident in CCA Command
+
+#### Overview
+
+The `view-resident-in-cca` command returns a list of residents that are part of a given cca name.
+
+Format:
+`view-resident-in-cca <cca name>`
+
+---
+
+#### Implementation
+
+The `view-resident-in-cca` command is implemented using the Command pattern.
+
+The `Parser` creates a `ViewResidentInCcaCommand`.
+`ViewResidentInCcaCommand.execute()` retrieves the resident name using `cca.getResidents() and cca.getExcos().`
+It then calls `ui.showResidentInCca(cca.getName(), members, exco)`.
+The list is printed in the output with EXCO and members with a separate tag.
+
+#### Sequence Diagram
+
+![view-resident-in-cca.png](images/view-resident-in-cca.png)
+
+#### Design Consideration
+
+This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
 ---
 
 ### Delete Resident Command
@@ -461,10 +494,10 @@ Format:
 
 ![add-resident-to-cca.png](images/add_resident_to_cca-new.png)
 
----
 #### Design Considerations
 
 This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
+---
 
 ### View Points Command
 
@@ -493,7 +526,7 @@ The view-points command retrieves and displays CCA points for all residents.
 #### Design Considerations
 
 This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
-
+---
 
 ### Resident Statistics Command
 
@@ -518,10 +551,10 @@ Format:
 #### Sequence Diagram
 ![Add Resident Statistics Sequence Diagram](images/resident-stats-new.png)
 
----
 #### Design Considerations
 
 This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
+---
 
 ### Update Point Command
 
@@ -545,7 +578,6 @@ If the resident or CCA cannot be found, the command catches the corresponding ex
 #### Sequence Diagram
 ![update-point.png](images/update-points.png)
 
----
 
 #### Design Considerations
 
@@ -576,13 +608,13 @@ If there are no residents in the system, the command displays an appropriate mes
 #### Sequence Diagram
 ![sort-points.png](images/sort-points.png)
 
----
 
 #### Design Considerations
 
 This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
 
 The sorting is performed at command level instead of within the `Ui`, so that presentation logic remains separate from business logic.
+---
 
 ## Event Commands
 
@@ -646,7 +678,6 @@ The command is implemented using the Command pattern.
 
 ![add-resident-to-event.png](images/add-resident-to-event-new.png)
 
----
 
 #### Design Considerations
 
@@ -656,6 +687,7 @@ The resident and CCA lookups are resolved first in the command layer before dele
 the event lookup to `EventManager`, ensuring each manager only handles its own domain.
 Note that `EventNotFoundException` sits outside the `CcaLedgerException` hierarchy by design
 — see the [Exception Handling](#exception-handling) section for details.
+---
 
 ### View My Events Command
 
@@ -682,7 +714,6 @@ The `Parser` creates a `ViewMyEvents` object from user input. `ViewMyEvents.exec
 #### Design Considerations
 
 This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
-
 ---
 
 ### View CCA Events Command
@@ -707,10 +738,10 @@ The `Parser` creates a `ViewCcaEvents` object from user input. `ViewCcaEvents.ex
 #### Sequence Diagram
 ![view-cca-events.png](images/view_cca_event-new.png)
 
----
 #### Design Considerations
 
 This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
+---
 
 ## General Commands
 
@@ -859,6 +890,7 @@ add-resident Suresh; A7654321C
 
 ```
 view-resident
+view-resident-in-cca basketball
 ```
 
 ---
@@ -901,6 +933,14 @@ view-exco Basketball
 
 #### 9. View Points
 
+```
+add-resident Ramesh; A1234567B
+add-resident Suresh; A7654321C
+add-cca Basektball; HIGH
+add-resident-to-cca A1234567B; Basketball; 50
+add-resident-to-cca A7654321C; basketball; 20
+view-points
+```
 ---
 
 #### 10. View Statistics
