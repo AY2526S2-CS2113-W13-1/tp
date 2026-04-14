@@ -397,6 +397,10 @@ The `view-resident` command retrieves and displays all residents.
 - `ViewResidentCommand.execute()` calls `ResidentManager.getResidentList()`.
 - The retrieved list is passed to `Ui.showResidentList(...)` for display.
 
+#### Design Considerations
+
+This command follows the Command Pattern described in the [Architecture section](#overall-architecture).
+The logic and the UI elements are separated such that the logic lies in the `ViewResidentCommand` class while the UI display elements lie in the `Ui` class.
 
 
 #### Sequence Diagram
