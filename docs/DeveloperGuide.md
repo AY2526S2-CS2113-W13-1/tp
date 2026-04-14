@@ -20,6 +20,8 @@
    - [Add Resident to CCA Command](#add-resident-to-cca-command)
    - [View Points Command](#view-points-command)
    - [Resident Statistics Command](#resident-statistics-command)
+   - [Sort Points Command](#sort-points-command)
+   - [Update Points Command](#update-point-command)
 4. [Event Commands](#event-commands)
    - [Add Event Command](#add-event-command)
    - [Add Resident to Event Command](#add-resident-to-event-command)
