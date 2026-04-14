@@ -444,7 +444,7 @@ since the name would no longer be accessible after the delete operation complete
 The `add-resident-to-cca` command adds an existing resident to a CCA.
 
 Format:
-`add-resident-to-cca <unique identifier>; <cca name> <points>`
+`add-resident-to-cca <unique identifier>; <cca name>; <points>`
 
 ---
 
