@@ -77,4 +77,90 @@ class AddEventIntegrationTest {
         assertEquals(1, eventManager.getEventList().size());
         assertEquals("Event 'Hackathon' already exists for this CCA on this date.", ui.getLastMessage());
     }
+
+    @Test
+    void execute_addEvent_invalidDateFormat_showsError() throws DuplicateCcaException, InvalidCcaLevelException {
+        ccaManager.addCCA("Dance", CcaLevel.LOW);
+
+        AddEventCommand command = new AddEventCommand("Annual Concert", "Dance", "25-12-2026");
+        command.execute(ccaManager, residentManager, eventManager, ui);
+
+        assertEquals(0, eventManager.getEventList().size());
+        assertEquals("Please enter a valid date in YYYY-MM-DD format.", ui.getLastMessage());
+    }
+
+    @Test
+    void execute_addEvent_invalidDateFormat_listUnchanged() throws DuplicateCcaException, InvalidCcaLevelException {
+        ccaManager.addCCA("Dance", CcaLevel.LOW);
+        AddEventCommand validCommand = new AddEventCommand("Annual Concert", "Dance", "2026-12-25");
+        validCommand.execute(ccaManager, residentManager, eventManager, ui);
+
+        AddEventCommand invalidCommand = new AddEventCommand("Gala Night", "Dance", "not-a-date");
+        invalidCommand.execute(ccaManager, residentManager, eventManager, ui);
+
+        assertEquals(1, eventManager.getEventList().size());
+    }
+
+    @Test
+    void execute_addEvent_ccaNameCaseInsensitive_success() throws DuplicateCcaException, InvalidCcaLevelException {
+        ccaManager.addCCA("Dance", CcaLevel.LOW);
+
+        AddEventCommand command = new AddEventCommand("Annual Concert", "dance", "2026-12-25");
+        command.execute(ccaManager, residentManager, eventManager, ui);
+
+        assertEquals(1, eventManager.getEventList().size());
+        assertEquals("Annual Concert", eventManager.getEventList().get(0).getEventName());
+    }
+
+    @Test
+    void execute_addSameEventNameDifferentDate_success() throws DuplicateCcaException, InvalidCcaLevelException {
+        ccaManager.addCCA("CodingClub", CcaLevel.MEDIUM);
+
+        new AddEventCommand("Hackathon", "CodingClub", "2026-09-10")
+                .execute(ccaManager, residentManager, eventManager, ui);
+        new AddEventCommand("Hackathon", "CodingClub", "2026-10-10")
+                .execute(ccaManager, residentManager, eventManager, ui);
+
+        assertEquals(2, eventManager.getEventList().size());
+    }
+
+    @Test
+    void execute_addSameEventNameDifferentCca_success() throws DuplicateCcaException, InvalidCcaLevelException {
+        ccaManager.addCCA("CodingClub", CcaLevel.MEDIUM);
+        ccaManager.addCCA("RoboticsClub", CcaLevel.HIGH);
+
+        new AddEventCommand("Hackathon", "CodingClub", "2026-09-10")
+                .execute(ccaManager, residentManager, eventManager, ui);
+        new AddEventCommand("Hackathon", "RoboticsClub", "2026-09-10")
+                .execute(ccaManager, residentManager, eventManager, ui);
+
+        assertEquals(2, eventManager.getEventList().size());
+        assertEquals("Event added: Hackathon for the CCA RoboticsClub, during 2026-09-10", ui.getLastMessage());
+    }
+
+    @Test
+    void execute_addMultipleEventsToSameCca_success() throws DuplicateCcaException, InvalidCcaLevelException {
+        ccaManager.addCCA("Dance", CcaLevel.LOW);
+
+        new AddEventCommand("Annual Concert", "Dance", "2026-12-25")
+                .execute(ccaManager, residentManager, eventManager, ui);
+        new AddEventCommand("Mid-Year Show", "Dance", "2026-06-15")
+                .execute(ccaManager, residentManager, eventManager, ui);
+        new AddEventCommand("Welcome Night", "Dance", "2026-01-10")
+                .execute(ccaManager, residentManager, eventManager, ui);
+
+        assertEquals(3, eventManager.getEventList().size());
+    }
+
+    @Test
+    void execute_addEvent_ccaNotFound_listUnchanged() throws DuplicateCcaException, InvalidCcaLevelException {
+        ccaManager.addCCA("Dance", CcaLevel.LOW);
+        new AddEventCommand("Annual Concert", "Dance", "2026-12-25")
+                .execute(ccaManager, residentManager, eventManager, ui);
+
+        new AddEventCommand("Match Day", "Football", "2026-06-01")
+                .execute(ccaManager, residentManager, eventManager, ui);
+
+        assertEquals(1, eventManager.getEventList().size());
+    }
 }
